@@ -1,0 +1,28 @@
+{
+  "name": "break-away",
+  "version": "1.0.0",
+  "description": "Break Away app",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "yarn build && node -r dotenv/config dist/index.js",
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "build:core": "cd ../../justin-core && yarn build",
+    "build:all": "yarn build:core && yarn build",
+    "test:unit": "jest --config=jest.unit.config.js --coverage --detectOpenHandles",
+    "test:integration": "jest --config=jest.integration.config.js --coverage --detectOpenHandles",
+    "test:api": "jest --config=jest.api.config.js --coverage",
+    "test": "yarn test:unit && yarn test:integration"
+  },
+  "keywords": [],
+  "devDependencies": {
+  },
+  "dependencies": {
+    "justin-core": "*"
+  },
+  "author": "MIA Collaborative",
+  "license": "ISC"
+}
