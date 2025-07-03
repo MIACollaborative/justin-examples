@@ -19,10 +19,8 @@
   },
   "keywords": [],
   "devDependencies": {
-  },
-  "dependencies": {
-    "justin-core": "*"
+    "typescript": "^5.8.3"
   },
   "author": "MIA Collaborative",
-  "license": "ISC"
+  "license": "BSD-3-Clause"
 }
