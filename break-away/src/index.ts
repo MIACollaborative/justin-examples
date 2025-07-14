@@ -1,12 +1,11 @@
-import { JustIn } from 'justin-core/src/JustInWrapper';
-import { JUser } from 'justin-core/src/user-manager/user.type';
-import { JEvent } from 'justin-core/src/event/event.type';
-import EventManager from 'justin-core/src/event/event.manager';
+import JustIn, { JUser, JEvent, Log } from 'justin-core';
+const justin = JustIn();
+/*
 import {
   DecisionRuleRegistration,
   StepReturnResult,
 } from 'justin-core/src/handlers/handler.type';
-import { Log } from 'justin-core/src/logger/logger-manager';
+
 
 // import mailjet function
 async function sendEmail(user: JUser, event: JEvent): Promise<StepReturnResult> {
@@ -83,7 +82,7 @@ async function main() {
 
   justin.registerDecisionRule(emailDecisionRule);
 
-  await EventManager.registerClockEventHandlers(
+  await justin.registerClockEventHandlers(
     'sendEmailEvery30Min',
     30 * 60 * 1000,
     ['sendEmailDecisionRule']
@@ -111,3 +110,4 @@ async function main() {
 main().catch((err) => {
   Log.error('Error in sample app:', err);
 });
+*/
