@@ -7,7 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "yarn build && node -r dotenv/config dist/index.js",
+    "start": "yarn build && node dist/index.js",
     "clean": "rm -rf dist",
     "build": "tsc",
     "build:core": "cd ../../justin-core && yarn build",
@@ -19,10 +19,8 @@
   },
   "keywords": [],
   "devDependencies": {
-  },
-  "dependencies": {
-    "justin-core": "*"
+    "typescript": "^5.8.3"
   },
   "author": "MIA Collaborative",
-  "license": "ISC"
+  "license": "BSD-3-Clause"
 }

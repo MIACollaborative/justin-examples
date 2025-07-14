@@ -1,16 +1,8 @@
-import { JustIn } from 'justin-core/src/JustInWrapper';
-import { JUser } from 'justin-core/src/user-manager/user.type';
-import { JEvent } from 'justin-core/src/event/event.type';
-import EventManager from 'justin-core/src/event/event.manager';
-import {
-  DecisionRuleRegistration,
-  StepReturnResult,
-} from 'justin-core/src/handlers/handler.type';
-import { Log } from 'justin-core/src/logger/logger-manager';
+import JustIn, { JUser, JEvent, Log, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
 
 // import mailjet function
-async function sendEmail(user: JUser, event: JEvent): Promise<StepReturnResult> {
-  Log.info(`Sending email to user: ${user.id}`);
+async function sendEmail(user: JUser, event: JEvent): Promise<Record<string, any>> {
+  Log.info(`Sending email to user: ${user.id} at ${event.timestamp}`);
 
   // Replace this with actual email sending logic
   await new Promise((resolve) => setTimeout(resolve, 100));
@@ -30,9 +22,15 @@ const emailDecisionRule: DecisionRuleRegistration = {
 
     // check that it is on the clock or 30 minutes after the clock
     const minutes = nowDate?.getMinutes();
+
+    // To Do: remove debug setting
+    status = 'success'; // Debug setting to always activate
+    /*
     if (typeof minutes === 'number' && minutes % 30 === 0) {
       status = 'success';
     }
+    */
+    Log.dev(`${status === 'success' ? '' : 'Not '}activate action for user: ${user.id}`);
     return { status: status, result: {} };
   },
   selectAction: async (
@@ -48,6 +46,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
       action = 'SendEmail';
     }
 
+    Log.dev(`Selected action: ${action} for user: ${user.id}`);
     return {
       status: 'success',
       result: {
@@ -55,24 +54,28 @@ const emailDecisionRule: DecisionRuleRegistration = {
       },
     };
   },
-  doAction: async (user, event, previousResult) => {
+  doAction: async (user: JUser, event: JEvent, previousResult: StepReturnResult): Promise<StepReturnResult<any>> => {
     const { action } = previousResult.result as Record<string, any>;
     if (action === 'SendEmail') {
       const sendStatus = await sendEmail(user, event);
-      return {
-        status: 'success',
+      const returnObject: StepReturnResult<any> = {
+        status: "success",
         result: {
           message: 'Action taken',
           sendStatus: sendStatus,
         },
       };
+      Log.dev(`Action taken for user: ${user.id}`, returnObject);
+      return returnObject;
     } else {
-      return {
-        status: 'success',
+      const returnObject: StepReturnResult<any> = {
+        status: "success",
         result: {
           message: 'No action taken',
         },
       };
+      Log.dev(`No action taken for user: ${user.id}`);  
+      return returnObject;
     }
   },
 };
@@ -81,11 +84,13 @@ async function main() {
   const justin = JustIn();
   await justin.initializeDB();
 
+  const intervalInMilliseconds = 5 * 1000; // 1 second
+
   justin.registerDecisionRule(emailDecisionRule);
 
-  await EventManager.registerClockEventHandlers(
-    'sendEmailEvery30Min',
-    30 * 60 * 1000,
+  await justin.registerClockEvent(
+    'sendEmailEvery1Sec',
+    intervalInMilliseconds,
     ['sendEmailDecisionRule']
   );
 
@@ -105,9 +110,11 @@ async function main() {
   ]);
 
   await justin.startEngine();
-  Log.info('Sample app started: will send email every 30 minutes.');
+  Log.info('Sample app started: will send email every 1 second.');
 }
 
 main().catch((err) => {
   Log.error('Error in sample app:', err);
 });
+
+
