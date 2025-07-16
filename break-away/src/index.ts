@@ -1,5 +1,5 @@
 import JustIn, { JUser, JEvent, Log, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
-import {EmailUtility}  from './lib/email-utility';
+import { EmailUtility }  from './lib/email-utility';
 
 async function sendEmail(user: JUser, event: JEvent): Promise<Record<string, any>> {
   Log.info(`Sending email to user: ${user.id} at ${event.timestamp}`);
