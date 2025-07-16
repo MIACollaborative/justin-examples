@@ -1,12 +1,15 @@
 import JustIn, { JUser, JEvent, Log, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
 import { EmailUtility }  from './lib/email-utility';
+import { MessageBank } from './lib/message-bank';
 
-async function sendEmail(user: JUser, event: JEvent): Promise<Record<string, any>> {
-  Log.info(`Sending email to user: ${user.id} at ${event.timestamp}`);
+async function sendEmailMessage(user: JUser, event: JEvent, message: string): Promise<Record<string, any>> {
+  Log.dev(`Sending email to user: ${user.id} at ${event.timestamp}: ${message}`);
 
-  // Replace this with actual email sending logic
+  // Testing: Replace this with actual email sending logic
   await new Promise((resolve) => setTimeout(resolve, 100));
 
+  // real code
+  /*
   const result = await EmailUtility.sendEmail(
     "JustIn Notification", // Sender name
     "server@example.com", // Sender address
@@ -21,7 +24,7 @@ async function sendEmail(user: JUser, event: JEvent): Promise<Record<string, any
     `<p>You have a new event: <strong>${event.name}</strong></p>`, // HTML content
     'JustInEventNotification' // Custom ID
   );
-
+  */
   return { status: 'success', result: 'Email sent' };
 }
 
@@ -72,12 +75,19 @@ const emailDecisionRule: DecisionRuleRegistration = {
   doAction: async (user: JUser, event: JEvent, previousResult: StepReturnResult): Promise<StepReturnResult<any>> => {
     const { action } = previousResult.result as Record<string, any>;
     if (action === 'SendEmail') {
-      const sendStatus = await sendEmail(user, event);
+      const tag = Math.random() < 0.5 ? 'generic' : 'tailored';
+      
+      const message = MessageBank.getMessageRanddomlyByTag(tag);
+
+      const sendStatus = await sendEmailMessage(user, event, message);
+
       const returnObject: StepReturnResult<any> = {
         status: "success",
         result: {
           message: 'Action taken',
           sendStatus: sendStatus,
+          contentTag: tag,
+          contentMessage: message,
         },
       };
       Log.dev(`Action taken for user: ${user.id}`, returnObject);
