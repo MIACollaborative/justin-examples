@@ -9,7 +9,6 @@ async function sendEmailMessage(user: JUser, event: JEvent, message: string): Pr
   await new Promise((resolve) => setTimeout(resolve, 100));
 
   // real code
-  /*
   const result = await EmailUtility.sendEmail(
     "JustIn Notification", // Sender name
     "server@example.com", // Sender address
@@ -19,12 +18,12 @@ async function sendEmailMessage(user: JUser, event: JEvent, message: string): Pr
         address: user.attributes.email
       }
     ], // Recipient name and address
-    `New event: ${event.name}`, // Subject
-    `You have a new event: ${event.name}`, // Text content
-    `<p>You have a new event: <strong>${event.name}</strong></p>`, // HTML content
+    `Break Away`, // Subject
+    ``, // Text content
+    `<p>Hi ${user.attributes.name}</p><p>${message}</p><p>Check-in: </p>`, // HTML content
     'JustInEventNotification' // Custom ID
   );
-  */
+
   return { status: 'success', result: 'Email sent' };
 }
 
