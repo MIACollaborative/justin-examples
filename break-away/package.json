@@ -19,8 +19,12 @@
   },
   "keywords": [],
   "devDependencies": {
+    "@types/node": "^24.0.14",
     "typescript": "^5.8.3"
   },
   "author": "MIA Collaborative",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "node-mailjet": "^6.0.8"
+  }
 }

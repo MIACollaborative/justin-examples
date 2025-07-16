@@ -1,11 +1,26 @@
 import JustIn, { JUser, JEvent, Log, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
+import {EmailUtility}  from './lib/email-utility';
 
-// import mailjet function
 async function sendEmail(user: JUser, event: JEvent): Promise<Record<string, any>> {
   Log.info(`Sending email to user: ${user.id} at ${event.timestamp}`);
 
   // Replace this with actual email sending logic
   await new Promise((resolve) => setTimeout(resolve, 100));
+
+  const result = await EmailUtility.sendEmail(
+    "JustIn Notification", // Sender name
+    "server@example.com", // Sender address
+    [
+      {
+        name: user.attributes.name, 
+        address: user.attributes.email
+      }
+    ], // Recipient name and address
+    `New event: ${event.name}`, // Subject
+    `You have a new event: ${event.name}`, // Text content
+    `<p>You have a new event: <strong>${event.name}</strong></p>`, // HTML content
+    'JustInEventNotification' // Custom ID
+  );
 
   return { status: 'success', result: 'Email sent' };
 }
@@ -99,13 +114,13 @@ async function main() {
   await justin.addUsersToDatabase([
     {
       id: 'user1',
-      email: 'user1@example.com',
-      attributes: { timezone: 'America/Detroit' },
+      uniqueIdentifier: 'person1',
+      attributes: { email: 'user1@example.com', timezone: 'America/Detroit', name: 'Person One'},
     },
     {
       id: 'user2',
-      email: 'user2@example.com',
-      attributes: { timezone: 'America/Chicago' },
+      uniqueIdentifier: 'person2',
+      attributes: { email: 'user2@example.com', timezone: 'America/Chicago', name: 'Person Two'},
     },
   ]);
 
