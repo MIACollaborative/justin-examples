@@ -15,7 +15,8 @@
     "test:unit": "jest --config=jest.unit.config.js --coverage --detectOpenHandles",
     "test:integration": "jest --config=jest.integration.config.js --coverage --detectOpenHandles",
     "test:api": "jest --config=jest.api.config.js --coverage",
-    "test": "yarn test:unit && yarn test:integration"
+    "test": "yarn test:unit && yarn test:integration",
+    "test:email": "yarn build && node dist/test_script/test_email.js"
   },
   "keywords": [],
   "devDependencies": {
@@ -25,6 +26,7 @@
   "author": "MIA Collaborative",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "dotenv": "^17.2.0",
     "node-mailjet": "^6.0.8"
   }
 }
