@@ -11,8 +11,8 @@ async function sendEmailMessage(user: JUser, event: JEvent, message: string): Pr
   // real code
   /*
   const result = await EmailUtility.sendEmail(
-    "JustIn Notification", // Sender name
-    "server@example.com", // Sender address
+    "BreakAway Notification", // Sender name
+    process.env.VERIFIED_SENDER_EMAIL as string, // Sender address
     [
       {
         name: user.attributes.name, 
@@ -21,7 +21,7 @@ async function sendEmailMessage(user: JUser, event: JEvent, message: string): Pr
     ], // Recipient name and address
     `Break Away`, // Subject
     ``, // Text content
-    `<p>Hi ${user.attributes.name}</p><p>${message}</p><p>Check-in: Google Form link here </p>`, // HTML content
+    `<p>Hi ${user.attributes.name}</p><p>${message}</p><p>Check-in: Google Form link here <a href="${process.env.CHECKIN_FORM_LINK.replace('[email]', user.attributes.email)}">Google Form</a></p>`, // HTML content
     'JustInEventNotification' // Custom ID
   );
   */
