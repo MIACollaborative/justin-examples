@@ -33,9 +33,10 @@ const sendEmailThroughMailjet = async (
   };
 
   try {
-    let result = await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: emailInfoList,
+    const result = await mailjet.post("send", { version: "v3.1" }).request({
+      "Messages": emailInfoList,
     });
+    console.log("Email sent result:", result.body);
     unifiedResponse.type = "response";
     unifiedResponse.status = result.response.status;
     unifiedResponse.statusText = result.response.statusText;
