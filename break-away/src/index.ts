@@ -1,15 +1,17 @@
 import JustIn, { JUser, JEvent, Log, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
+import { config } from "dotenv";
 import { EmailUtility }  from './lib/email-utility';
 import { MessageBank } from './lib/message-bank';
+config();  
 
 async function sendEmailMessage(user: JUser, event: JEvent, message: string): Promise<Record<string, any>> {
-  Log.dev(`Sending email to user: ${user.id} at ${event.timestamp}: ${message}`);
+  console.log(`Sending email to user: ${user.id} at ${event.timestamp}: ${message}`);
 
   // Testing: Replace this with actual email sending logic
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  //await new Promise((resolve) => setTimeout(resolve, 100));
 
-  // real code
-  /*
+  // Real code
+  const checkinFormLink = process.env.CHECKIN_FORM_LINK as string;
   const result = await EmailUtility.sendEmail(
     "BreakAway Notification", // Sender name
     process.env.VERIFIED_SENDER_EMAIL as string, // Sender address
@@ -21,10 +23,9 @@ async function sendEmailMessage(user: JUser, event: JEvent, message: string): Pr
     ], // Recipient name and address
     `Break Away`, // Subject
     ``, // Text content
-    `<p>Hi ${user.attributes.name}</p><p>${message}</p><p>Check-in: Google Form link here <a href="${process.env.CHECKIN_FORM_LINK.replace('[email]', user.attributes.email)}">Google Form</a></p>`, // HTML content
+    `<p>Hi ${user.attributes.name}</p><p>${message}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`, // HTML content
     'JustInEventNotification' // Custom ID
   );
-  */
 
   return { status: 'success', result: 'Email sent' };
 }
@@ -43,13 +44,13 @@ const emailDecisionRule: DecisionRuleRegistration = {
     const minutes = nowDate?.getMinutes();
 
     // To Do: remove debug setting
-    status = 'success'; // Debug setting to always activate
-    /*
+    //status = 'success'; // Debug setting to always activate
+    
     if (typeof minutes === 'number' && minutes % 30 === 0) {
       status = 'success';
     }
-    */
-    Log.dev(`${status === 'success' ? '' : 'Not '}activate action for user: ${user.id}`);
+    
+    console.log(`${status === 'success' ? '' : 'Not '}activate action for user: ${user.id}`);
     return { status: status, result: {} };
   },
   selectAction: async (
@@ -65,7 +66,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
       action = 'SendEmail';
     }
 
-    Log.dev(`Selected action: ${action} for user: ${user.id}`);
+    console.log(`Selected action: ${action} for user: ${user.id}`);
     return {
       status: 'success',
       result: {
@@ -91,7 +92,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
           contentMessage: message,
         },
       };
-      Log.dev(`Action taken for user: ${user.id}`, returnObject);
+      console.log(`Action taken for user: ${user.id}`, returnObject);
       return returnObject;
     } else {
       const returnObject: StepReturnResult<any> = {
@@ -100,7 +101,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
           message: 'No action taken',
         },
       };
-      Log.dev(`No action taken for user: ${user.id}`);  
+      console.log(`No action taken for user: ${user.id}`);  
       return returnObject;
     }
   },
@@ -119,28 +120,26 @@ async function main() {
     intervalInMilliseconds,
     ['sendEmailDecisionRule']
   );
-
-  // To Do: Need to load content
   
   await justin.addUsersToDatabase([
     {
       id: 'user1',
       uniqueIdentifier: 'person1',
-      attributes: { email: 'user1@example.com', timezone: 'America/Detroit', name: 'Person One'},
+      attributes: { email: process.env.TEST_RECIPIENT_EMAIL_1, timezone: 'America/Detroit', name: 'Person One'},
     },
     {
       id: 'user2',
       uniqueIdentifier: 'person2',
-      attributes: { email: 'user2@example.com', timezone: 'America/Chicago', name: 'Person Two'},
+      attributes: { email: process.env.TEST_RECIPIENT_EMAIL_2, timezone: 'America/Chicago', name: 'Person Two'},
     },
   ]);
 
   await justin.startEngine();
-  Log.info('Sample app started: will send email every 1 second.');
+  console.log('Sample app started: will send email every 1 second.');
 }
 
 main().catch((err) => {
-  Log.error('Error in sample app:', err);
+  console.error('Error in sample app:', err);
 });
 
 
