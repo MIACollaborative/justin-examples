@@ -58,12 +58,12 @@ const emailDecisionRule: DecisionRuleRegistration = {
     _event: JEvent,
     _previousResult: StepReturnResult
   ): Promise<StepReturnResult> => {
-    let action: 'SendEmail' | 'NoAction' = 'NoAction';
+    let action: 'SendTailoredEmail' | 'SendGenericEmail' = 'SendGenericEmail';
 
     // get a random number and send email 50% of the time
     const randomNumber = Math.random();
     if (randomNumber < 0.5) {
-      action = 'SendEmail';
+      action = 'SendTailoredEmail';
     }
 
     console.log(`Selected action: ${action} for user: ${user.id}`);
@@ -76,8 +76,8 @@ const emailDecisionRule: DecisionRuleRegistration = {
   },
   doAction: async (user: JUser, event: JEvent, previousResult: StepReturnResult): Promise<StepReturnResult<any>> => {
     const { action } = previousResult.result as Record<string, any>;
-    if (action === 'SendEmail') {
-      const tag = Math.random() < 0.5 ? 'generic' : 'tailored';
+    if (action === 'SendTailoredEmail') {
+      const tag = 'tailored';
       
       const message = MessageBank.getMessageRanddomlyByTag(tag);
 
@@ -87,6 +87,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
         status: "success",
         result: {
           message: 'Action taken',
+          action: action,
           sendStatus: sendStatus,
           contentTag: tag,
           contentMessage: message,
@@ -95,13 +96,23 @@ const emailDecisionRule: DecisionRuleRegistration = {
       console.log(`Action taken for user: ${user.id}`, returnObject);
       return returnObject;
     } else {
+      const tag = 'generic';
+      
+      const message = MessageBank.getMessageRanddomlyByTag(tag);
+
+      const sendStatus = await sendEmailMessage(user, event, message);
+
       const returnObject: StepReturnResult<any> = {
         status: "success",
         result: {
-          message: 'No action taken',
+          message: 'Action taken',
+          action: action,
+          sendStatus: sendStatus,
+          contentTag: tag,
+          contentMessage: message,
         },
       };
-      console.log(`No action taken for user: ${user.id}`);  
+      console.log(`Action taken for user: ${user.id}`, returnObject);
       return returnObject;
     }
   },
