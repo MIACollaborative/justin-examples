@@ -7,10 +7,6 @@ config();
 async function sendEmailMessage(user: JUser, event: JEvent, message: string): Promise<Record<string, any>> {
   console.log(`Sending email to user: ${user.id} at ${event.timestamp}: ${message}`);
 
-  // Testing: Replace this with actual email sending logic
-  //await new Promise((resolve) => setTimeout(resolve, 100));
-
-  // Real code
   const checkinFormLink = process.env.CHECKIN_FORM_LINK as string;
   const result = await EmailUtility.sendEmail(
     "BreakAway Notification", // Sender name
@@ -39,14 +35,13 @@ const emailDecisionRule: DecisionRuleRegistration = {
     let status: 'stop' | 'success' | 'error' = 'stop';
 
     const nowDate = event.timestamp;
-
-    // check that it is on the clock or 30 minutes after the clock
+  
     const minutes = nowDate?.getMinutes();
 
     // To Do: remove debug setting
     //status = 'success'; // Debug setting to always activate
     
-    if (typeof minutes === 'number' && minutes % 30 === 0) {
+    if (typeof minutes === 'number' && minutes % 2 === 0) {
       status = 'success';
     }
     
@@ -122,7 +117,7 @@ async function main() {
   const justin = JustIn();
   await justin.initializeDB();
 
-  const intervalInMilliseconds = 5 * 1000; // 1 second
+  const intervalInMilliseconds = 60 * 1000; // 1 second
 
   justin.registerDecisionRule(emailDecisionRule);
 
