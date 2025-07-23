@@ -1,8 +1,12 @@
-import JustIn, { JUser, JEvent, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
+import JustIn, { Log, JUser, JEvent, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
 import { config } from "dotenv";
-import { EmailUtility }  from './lib/email-utility';
+import { EmailUtility } from './lib/email-utility';
 import { MessageBank } from './lib/message-bank';
-config();  
+import { UserHelper } from './lib/user-helper';
+config();
+
+
+const minutesToSend = 2;
 
 async function sendEmailMessage(user: JUser, event: JEvent, message: string): Promise<Record<string, any>> {
   console.log(`Sending email to user: ${user.id} at ${event.timestamp}: ${message}`);
@@ -13,7 +17,7 @@ async function sendEmailMessage(user: JUser, event: JEvent, message: string): Pr
     process.env.VERIFIED_SENDER_EMAIL as string, // Sender address
     [
       {
-        name: user.attributes.name, 
+        name: user.attributes.name,
         address: user.attributes.email
       }
     ], // Recipient name and address
@@ -35,16 +39,16 @@ const emailDecisionRule: DecisionRuleRegistration = {
     let status: 'stop' | 'success' | 'error' = 'stop';
 
     const nowDate = event.timestamp;
-  
+
     const minutes = nowDate?.getMinutes();
 
     // To Do: remove debug setting
     //status = 'success'; // Debug setting to always activate
-    
-    if (typeof minutes === 'number' && minutes % 2 === 0) {
+
+    if (typeof minutes === 'number' && minutes % minutesToSend === 0) {
       status = 'success';
     }
-    
+
     console.log(`${status === 'success' ? '' : 'Not '}activate action for user: ${user.id}`);
     return { status: status, result: {} };
   },
@@ -73,8 +77,8 @@ const emailDecisionRule: DecisionRuleRegistration = {
     const { action } = previousResult.result as Record<string, any>;
     if (action === 'SendTailoredEmail') {
       const tag = 'tailored';
-      
-      const message = MessageBank.getMessageRanddomlyByTag(tag);
+
+      const message = MessageBank.getMessageRandomlyByTag(tag);
 
       const sendStatus = await sendEmailMessage(user, event, message);
 
@@ -92,8 +96,8 @@ const emailDecisionRule: DecisionRuleRegistration = {
       return returnObject;
     } else {
       const tag = 'generic';
-      
-      const message = MessageBank.getMessageRanddomlyByTag(tag);
+
+      const message = MessageBank.getMessageRandomlyByTag(tag);
 
       const sendStatus = await sendEmailMessage(user, event, message);
 
@@ -115,33 +119,33 @@ const emailDecisionRule: DecisionRuleRegistration = {
 
 async function main() {
   const justin = JustIn();
+
+  // To Do:  this doesn't seem to work
+  justin.setLoggingLevels({
+    dev: false,
+    info: false,
+    warn: false,
+    error: true,
+    handlerResults: true,
+  });
+
   await justin.initializeDB();
 
-  const intervalInMilliseconds = 60 * 1000; // 1 second
+  const intervalInMilliseconds = 60 * 1000; // 1 minute
 
   justin.registerDecisionRule(emailDecisionRule);
 
   await justin.registerClockEvent(
-    'sendEmailEvery1Sec',
+    'sendEmailEveryNowAndThen',
     intervalInMilliseconds,
     ['sendEmailDecisionRule']
   );
-  
-  await justin.addUsersToDatabase([
-    {
-      id: 'user1',
-      uniqueIdentifier: 'person1',
-      attributes: { email: process.env.TEST_RECIPIENT_EMAIL_1, timezone: 'America/Detroit', name: 'Person One'},
-    },
-    {
-      id: 'user2',
-      uniqueIdentifier: 'person2',
-      attributes: { email: process.env.TEST_RECIPIENT_EMAIL_2, timezone: 'America/Chicago', name: 'Person Two'},
-    },
-  ]);
+
+  await justin.addUsersToDatabase(await UserHelper.loadUsers());
+  await MessageBank.loadMessages();
 
   await justin.startEngine();
-  console.log('Sample app started: will send email every 1 second.');
+  console.log(`Sample app started: will send email every ${minutesToSend} minutes.`);
 }
 
 main().catch((err) => {
