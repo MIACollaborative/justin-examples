@@ -69,7 +69,6 @@ const sendEmail = async ( senderName: string, senderAddress: string,
   return sendEmailThroughMailjet(emailInfoList);
 };
 
-// export as a module named EmailUtility
 export const EmailUtility =  {
     sendEmail
 };

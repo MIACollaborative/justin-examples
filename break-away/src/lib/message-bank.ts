@@ -1,32 +1,19 @@
-const messageList = [
-  {
-    content: "Take a break!",
-    tagList: ["generic"],
-  },
-  {
-    content: "A brief screen break can refresh your mind and boost your focus.",
-    tagList: ["tailored"],
-  },
-  {
-    content: "Even a five-minute stretch away from your screen can significantly improve your well-being.",
-    tagList: ["tailored"],
-  },
-  {
-    content: "Many colleagues find a short screen break helps maintain energy and creativity throughout the day.",
-    tagList: ["tailored"],
-  },
-  {
-    content: "Invest in your well-being: a mindful screen break can prevent fatigue and enhance productivity.",
-    tagList: ["tailored"],
-  },
-  {
-    content: "Start fresh with a quick break; consistent pauses lead to sustained clarity and comfort.",
-    tagList: ["tailored"],
-  }
-];
+import { CSVUtility } from "./csv-utility";
 
-const getMessageRanddomlyByTag = (tag: string): string => {
-  const filteredMessages = messageList.filter(message => message.tagList.includes(tag));
+let messageList: { content: string, tag: string }[] = [];
+
+const loadMessages = async (): Promise<void> => {
+  try {
+    const result = await CSVUtility.parseCSVFile('./content/messages.csv');
+    messageList = result as { content: string, tag: string }[];
+  } catch (error) {  
+    console.error("Error loading messages:", error);
+    messageList = [];
+  }
+};
+
+const getMessageRandomlyByTag = (tag: string): string => {
+  const filteredMessages = messageList.filter(message => message.tag === tag);
   if (filteredMessages.length === 0) {
     return "No messages available for this tag.";
   }
@@ -34,7 +21,7 @@ const getMessageRanddomlyByTag = (tag: string): string => {
   return filteredMessages[randomIndex].content;
 };
 
-// export as a module named MessageBank
 export const MessageBank = {
-  getMessageRanddomlyByTag
+  loadMessages,
+  getMessageRandomlyByTag
 };

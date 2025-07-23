@@ -4,6 +4,8 @@ import { EmailUtility }  from './lib/email-utility';
 import { MessageBank } from './lib/message-bank';
 config();  
 
+const minutesToSend = 2;
+
 async function sendEmailMessage(user: JUser, event: JEvent, message: string): Promise<Record<string, any>> {
   console.log(`Sending email to user: ${user.id} at ${event.timestamp}: ${message}`);
 
@@ -41,7 +43,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
     // To Do: remove debug setting
     //status = 'success'; // Debug setting to always activate
     
-    if (typeof minutes === 'number' && minutes % 2 === 0) {
+    if (typeof minutes === 'number' && minutes % minutesToSend === 0) {
       status = 'success';
     }
     
@@ -74,7 +76,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
     if (action === 'SendTailoredEmail') {
       const tag = 'tailored';
       
-      const message = MessageBank.getMessageRanddomlyByTag(tag);
+      const message = MessageBank.getMessageRandomlyByTag(tag);
 
       const sendStatus = await sendEmailMessage(user, event, message);
 
@@ -93,7 +95,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
     } else {
       const tag = 'generic';
       
-      const message = MessageBank.getMessageRanddomlyByTag(tag);
+      const message = MessageBank.getMessageRandomlyByTag(tag);
 
       const sendStatus = await sendEmailMessage(user, event, message);
 
@@ -140,8 +142,10 @@ async function main() {
     },
   ]);
 
+  await MessageBank.loadMessages();
+
   await justin.startEngine();
-  console.log('Sample app started: will send email every 1 second.');
+  console.log(`Sample app started: will send email every ${minutesToSend} minutes.`);
 }
 
 main().catch((err) => {
