@@ -119,8 +119,7 @@ const emailDecisionRule: DecisionRuleRegistration = {
 
 async function main() {
   const justin = JustIn();
-
-  // To Do:  this doesn't seem to work
+  
   justin.setLoggingLevels({
     dev: false,
     info: false,
