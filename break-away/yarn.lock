@@ -170,6 +170,7 @@ json-bigint@^1.0.0:
   resolved "file:../../justin-core"
   dependencies:
     mongodb "^6.10.0"
+    mongodb-memory-server "^10.1.4"
     uuid "^11.0.3"
     zod "^3.23.8"
 
