@@ -1,52 +1,35 @@
 # justin-examples
 
-## Getting Started
+## Try the examples
 
-The current recommended way to use this framework is to fork the repository and write your own application in the /src/apps folder.
+To use the examples in this repo, clone the repo and cd into the example directory you want to try (e.g., `break-away`). You can also create new app folders and write your own! Refer to the config files (e.g., package.json, tsconfig.json) in break-away or other example app directories for what you'll need.
 
-### Install the basics
+Be sure to check out the example app's README for any instructions related to that app.
 
-We use yarn as our package manager.
+## Install MongoDB
 
-Yarn: https://yarnpkg.com/
+JustIn requires a MongoDB server with replica sets in order to work. These instructions cover how to set up a local instance of MongoDB for testing and playing with the examples.
 
-### Install MongoDB
-Instructions: [download MongoDB community edition](https://www.mongodb.com/docs/manual/administration/install-community/)
+### Download MongoDB Community Edition
+
+[Download MongoDB community edition](https://www.mongodb.com/docs/manual/administration/install-community/)
 
 ### Create folder for storing data
 
-On Mac, create /data/mdata under the home folder, or  ~/data/mdata.
+On Mac, create a `/data/mdata` directory in your home directory (`$ mkdir ~/data/mdata`).
 
-On Windows, create \data\db under the c disk, or c:\data\db.
-
+On Windows, create a `\data\db` directory at the top level of your C: drive, or (`mkdir c:\data\db`).
 
 ### Run MongoDB
 
-In command line/terminal:
+In your command line/terminal:
 
 ```bash
 
-# Mac: create ~/data/mdata folder first, and then run the following command in the terminal:
 mongod --port 27017 --dbpath ~/data/mdata --replSet rs0 --bind_ip localhost
 
-# Windows: create C:\datea\db  folder first, and then run the following command in the terminal:
-mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
-
 ```
-### Install MongoDB GUI
+### Install MongoDB GUI (Optional)
 
-Downlaod [MongoDB compass](https://www.mongodb.com/products/compass) for database GUI (or use command line if you prefer)
+If you want to see the data that JustIn creates and modifies in Mongo, you can use [MongoDB compass](https://www.mongodb.com/products/compass) for exploring the DB, or you can use [mongosh](https://www.mongodb.com/docs/mongodb-shell/) from the command line.
 
-### Configure environment settings
-
-Create a file named ".env" in the root of the project folder with the following content:
-
-```bash
-MONGO_URI="mongodb://127.0.0.1:27017?retryWrites=true&w=majority"
-DB_NAME="justin"
-MAILJET_API_KEY="[mailjet api key]"
-MAILJET_SECRET_KEY="[mailjet secret key]"
-VERIFIED_SENDER_EMAIL="[email sender address]"
-CHECKIN_FORM_LINK="[google form url with parameter for pre-filled email]"
-
-```
