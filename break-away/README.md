@@ -19,6 +19,14 @@ VERIFIED_SENDER_EMAIL="[email sender address]"
 CHECKIN_FORM_LINK="[google form url with parameter for pre-filled email]"
 
 ```
+### Install dependencies
+
+We prefer [yarn](https://yarnpkg.com/) as our package manager, so everything has been tested using yarn. Feel free to use others, but YMMV. To install dependencies using yarn:
+
+```
+$ yarn
+```
+
 
 ### Add some users
 
