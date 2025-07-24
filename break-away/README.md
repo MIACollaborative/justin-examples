@@ -19,3 +19,13 @@ VERIFIED_SENDER_EMAIL="[email sender address]"
 CHECKIN_FORM_LINK="[google form url with parameter for pre-filled email]"
 
 ```
+
+### Add some users
+
+Modify `content/users.csv` to include information about your test users, such as an email address that you can check to verify break-away is working. The break-away app will read this file and load the users from it each time it is run.
+
+### Run the app
+
+Type `yarn start` to launch break-away. You will see some logging output, and should start receiving emails in an hour or so. 
+
+Of course you might not want to wait that long, so you can change the variable `minutesBetweenEmails` in the file `src/decision-rules/screen-break-email.dr.ts` to something smaller, like `2`. Restart the app and your emails will flow more quickly!
