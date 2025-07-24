@@ -1,4 +1,5 @@
 import { CSVUtility } from "./csv-utility";
+import { Log } from "justin-core";
 
 let messageList: { content: string, tag: string }[] = [];
 
@@ -7,7 +8,7 @@ const loadMessages = async (): Promise<void> => {
     const result = await CSVUtility.parseCSVFile('./content/messages.csv');
     messageList = result as { content: string, tag: string }[];
   } catch (error) {  
-    console.error("Error loading messages:", error);
+    Log.error("Error loading messages:", error);
     messageList = [];
   }
 };

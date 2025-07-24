@@ -1,3 +1,3 @@
-id,uniqueIdentifier,email,timezone,name
-user1,person1,TEST_RECIPIENT_EMAIL_1,America/Detroit,Person One
-user2,person2,TEST_RECIPIENT_EMAIL_2,America/Chicago,Person Two
+study_id,email,timezone,name
+P1,test1@example.com,America/Detroit,Jimmy
+P2,test2@example.com,America/Chicago,Sally

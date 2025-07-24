@@ -1,4 +1,4 @@
-import { MessageBank } from "../lib/message-bank";
+import { MessageBank } from "../message-bank";
 
 MessageBank.loadMessages()
     .then(() => {

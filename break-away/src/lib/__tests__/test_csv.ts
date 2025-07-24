@@ -1,4 +1,4 @@
-import { CSVUtility } from "../lib/csv-utility";
+import { CSVUtility } from "../csv-utility";
 
 CSVUtility.parseCSVFile('./content/messages.csv')
     .then((data) => {

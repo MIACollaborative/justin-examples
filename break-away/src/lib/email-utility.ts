@@ -1,6 +1,8 @@
 import Mailjet from "node-mailjet";
 import { config } from "dotenv";
 import { inspect } from "util";
+import { Log } from "justin-core";
+
 config();  
 
 const sendEmailThroughMailjet = async (
@@ -36,7 +38,7 @@ const sendEmailThroughMailjet = async (
     const result = await mailjet.post("send", { version: "v3.1" }).request({
       "Messages": emailInfoList,
     });
-    console.log("Email sent result:", result.body);
+    Log.info("Email sent result:", result.body);
     unifiedResponse.type = "response";
     unifiedResponse.status = result.response.status;
     unifiedResponse.statusText = result.response.statusText;
@@ -51,21 +53,25 @@ const sendEmailThroughMailjet = async (
   return unifiedResponse;
 };
 
-const sendEmail = async ( senderName: string, senderAddress: string,
+const sendEmail = async ( 
+  senderName: string, 
+  senderAddress: string,
   recipientNameAddressList: { name: string, address: string }[],
   subject: string,
   textContent: string,
   htmlContent?: string,
   customID: string = "JustIn Email Notification"
 ): Promise<Object> => {
-  const emailInfoList = recipientNameAddressList.map(({ name: recipientName, address: recipientAddress }) => ({
-    From: { Email: senderAddress, Name: senderName },
-    To: [{ Email: recipientAddress, Name: recipientName }],
-    Subject: subject,
-    TextPart: textContent,
-    HTMLPart: htmlContent? `${htmlContent}` : `<p>${textContent}</p>`,
-    CustomID: customID
-  }));
+  const emailInfoList = recipientNameAddressList.map(
+    ({ name: recipientName, address: recipientAddress }) => ({
+      From: { Email: senderAddress, Name: senderName },
+      To: [{ Email: recipientAddress, Name: recipientName }],
+      Subject: subject,
+      TextPart: textContent,
+      HTMLPart: htmlContent? `${htmlContent}` : `<p>${textContent}</p>`,
+      CustomID: customID
+    }
+  ));
   return sendEmailThroughMailjet(emailInfoList);
 };
 

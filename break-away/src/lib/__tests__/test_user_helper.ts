@@ -1,4 +1,4 @@
-import { UserHelper } from "../lib/user-helper";
+import { UserHelper } from "../user-helper";
 
 UserHelper.loadUsers()
     .then(() => {
