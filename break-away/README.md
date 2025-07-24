@@ -2,7 +2,7 @@
 # Break-Away
 
 This example app shows how to write and run Decision Rules using `justin-core`. To run this app you will need a few things in place:
-1. A mongo server that JustIn can connect to. (See XXX for setup options/instructions.)
+1. A mongo server that JustIn can connect to. (See the top level [README](../) for setup options/instructions.)
 2. Credentials for using [MailJet](https://mailjet.com)
 3. A URL to a form where users can submit their self-response data.
 
