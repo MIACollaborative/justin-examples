@@ -5,7 +5,7 @@ import { Log } from "@just-in/core";
 import sgMail from "@sendgrid/mail";
 import { EmailPayload } from "./email.types";
 
-config();  
+config({ quiet: true });  
 
 const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
   if (!process.env.SENDGRID_API_KEY) {

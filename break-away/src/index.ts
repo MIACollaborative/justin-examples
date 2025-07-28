@@ -4,7 +4,7 @@ import { MessageBank } from './lib/message-bank';
 import { UserHelper } from './lib/user-helper';
 import { ScreenBreakEmailDecisionRule } from './decision-rules/screen-break-email.dr';
 
-config();
+config({ quiet: true });
 
 async function main() {
 
