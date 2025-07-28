@@ -1,10 +1,12 @@
 import { DecisionRuleRegistration, JEvent, JUser, Log, StepReturnResult } from "justin-core";
 import { MessageBank } from "../lib/message-bank";
 import { sendEmailMessage } from "../actions/send-email-action";
+import { sendGridSendEmail } from "../lib/sendgrid/send-mail";
 
 const name: string =  'sendEmailDecisionRule';
 const minutesBetweenEmails: number = 2;
 const probabilityOfPersuasiveEmail: number = 0.5;
+const checkinFormLink = process.env.CHECKIN_FORM_LINK as string;
 
 const enum Action {
   SendPersuasiveEmail = 'SendPersuasiveEmail',
@@ -68,7 +70,11 @@ const doAction = async (
   if (action === Action.SendPersuasiveEmail) {
     const tag = ContentTag.Persuasive;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
-    const sendStatus = await sendEmailMessage(user, event, interventionMessage);
+    const sendStatus = await sendGridSendEmail(
+      user.attributes.email, 
+      "BreakAway Notification", 
+      interventionMessage,
+      `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
 
     returnObject = {
       status: "success",
@@ -83,7 +89,11 @@ const doAction = async (
   } else {
     const tag = ContentTag.Generic;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
-    const sendStatus = await sendEmailMessage(user, event, interventionMessage);
+    const sendStatus = await sendGridSendEmail(
+      user.attributes.email, 
+      "BreakAway Notification", 
+      interventionMessage,
+      `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
 
     returnObject = {
       status: "success",
