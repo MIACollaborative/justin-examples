@@ -1,4 +1,4 @@
-import JustIn, { Log, JUser, JEvent, StepReturnResult, DecisionRuleRegistration } from 'justin-core';
+import JustIn, { Log, JUser, JEvent, StepReturnResult, DecisionRuleRegistration } from '@just-in/core';
 import { config } from "dotenv";
 import { MessageBank } from './lib/message-bank';
 import { UserHelper } from './lib/user-helper';
@@ -12,8 +12,8 @@ async function main() {
   
   justIn.setLoggingLevels({
     dev: false,
-    info: false,
-    warn: false,
+    info: true,
+    warn: true,
     error: true,
     handlerResults: false,
   });

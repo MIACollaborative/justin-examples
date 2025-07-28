@@ -1,5 +1,5 @@
 import { CSVUtility } from "./csv-utility";
-import { Log } from "justin-core";
+import { Log } from "@just-in/core";
 
 let messageList: { content: string, tag: string }[] = [];
 

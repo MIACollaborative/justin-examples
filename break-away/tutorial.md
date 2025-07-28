@@ -47,7 +47,7 @@ MAILJET_SECRET_KEY="[mailjet secret key]"
 
 Create decision-rule-1.ts
 ```
-import { StepReturnResult } from 'justin-core';
+import { StepReturnResult } from '@just-in/core';
 
 /* Will add implementation later */
 

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as Papa from 'papaparse'; 
-import { Log } from 'justin-core';
+import { Log } from '@just-in/core';
 
 const parseCSVFile = async (filePath: string): Promise<object[]> => {
   try {

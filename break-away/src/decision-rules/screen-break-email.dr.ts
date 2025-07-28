@@ -1,4 +1,4 @@
-import { DecisionRuleRegistration, JEvent, JUser, Log, StepReturnResult } from "justin-core";
+import { DecisionRuleRegistration, JEvent, JUser, Log, StepReturnResult } from "@just-in/core";
 import { MessageBank } from "../lib/message-bank";
 import { sendEmailMessage } from "../actions/send-email-action";
 import { sendGridSendEmail } from "../lib/sendgrid/send-mail";

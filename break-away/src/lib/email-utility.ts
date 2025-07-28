@@ -1,7 +1,7 @@
 import Mailjet from "node-mailjet";
 import { config } from "dotenv";
 import { inspect } from "util";
-import { Log } from "justin-core";
+import { Log } from "@just-in/core";
 import sgMail from "@sendgrid/mail";
 import { EmailPayload } from "./email.types";
 
