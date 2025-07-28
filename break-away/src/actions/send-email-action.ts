@@ -1,4 +1,4 @@
-import { JEvent, JUser, Log } from "justin-core";
+import { JEvent, JUser, Log } from "@just-in/core";
 import { EmailUtility } from "../lib/email-utility";
 
 export const sendEmailMessage = async(
