@@ -8,7 +8,6 @@ config();
 
 async function main() {
 
-
   const justIn = JustIn();
   
   justIn.setLoggingLevels({
@@ -29,7 +28,7 @@ async function main() {
   const intervalTimerEventType = 'intervalTimerEvent';
   justIn.createIntervalTimerEventGenerator(
     intervalTimerEventType,
-    intervalInMilliseconds
+    intervalInMilliseconds,
   );
 
   justIn.registerDecisionRule(ScreenBreakEmailDecisionRule);
