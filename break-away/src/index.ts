@@ -13,7 +13,7 @@ async function main() {
   justIn.setLoggingLevels({
     dev: false,
     info: false,
-    warn: false,
+    warn: true,
     error: true,
     handlerResults: false,
   });
