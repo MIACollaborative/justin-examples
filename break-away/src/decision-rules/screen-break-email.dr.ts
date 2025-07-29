@@ -1,8 +1,7 @@
 import { DecisionRuleRegistration, JEvent, JUser, Log, StepReturnResult } from "@just-in/core";
 import { MessageBank } from "../lib/message-bank";
-import { sendEmailMessage } from "../actions/send-email-action";
 import { sendGridSendEmail } from "../lib/sendgrid/send-mail";
-
+import { EmailUtility } from "../lib/email-utility"
 const name: string =  'sendEmailDecisionRule';
 const minutesBetweenEmails: number = 2;
 const probabilityOfPersuasiveEmail: number = 0.5;
@@ -70,9 +69,12 @@ const doAction = async (
   if (action === Action.SendPersuasiveEmail) {
     const tag = ContentTag.Persuasive;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
-    const sendStatus = await sendGridSendEmail(
-      user.attributes.email, 
-      "BreakAway Notification", 
+    const sendStatus = await EmailUtility.sendEmail(
+      "mailjet",
+      "BreakAway Notification",
+      process.env.VERIFIED_SENDER_EMAIL as string,
+      [{ name: user.attributes.name, address: user.attributes.email }],
+      "BreakAway Notification",
       interventionMessage,
       `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
 
@@ -89,12 +91,22 @@ const doAction = async (
   } else {
     const tag = ContentTag.Generic;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
+        const sendStatus = await EmailUtility.sendEmail(
+      "mailjet",
+      "BreakAway Notification",
+      process.env.VERIFIED_SENDER_EMAIL as string,
+      [{ name: user.attributes.name, address: user.attributes.email }],
+      "BreakAway Notification",
+      interventionMessage,
+      `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
+
+    /*
     const sendStatus = await sendGridSendEmail(
       user.attributes.email, 
       "BreakAway Notification", 
       interventionMessage,
       `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
-
+    */
     returnObject = {
       status: "success",
       result: {
