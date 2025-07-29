@@ -9,6 +9,7 @@ export const sendEmailMessage = async(
 
   const checkinFormLink = process.env.CHECKIN_FORM_LINK as string;
   const result = await EmailUtility.sendEmail(
+    "sendgrid",
     "BreakAway Notification", // Sender name
     process.env.VERIFIED_SENDER_EMAIL as string, // Sender address
     [

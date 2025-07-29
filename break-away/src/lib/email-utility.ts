@@ -5,7 +5,7 @@ import { Log } from "@just-in/core";
 import sgMail from "@sendgrid/mail";
 import { EmailPayload } from "./email.types";
 
-config({ quiet: true });  
+config({ quiet: true });
 
 const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
   if (!process.env.SENDGRID_API_KEY) {
@@ -18,8 +18,8 @@ const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg: any = {
-    from: { email: process.env.VERIFIED_SENDER_EMAIL, name: payload.from.name },
-    to: payload.to.map(r => r.address),
+    from: { email: payload.from.email, name: payload.from.name },
+    to: payload.to.map((r) => r.address),
     subject: payload.subject,
     text: payload.text,
     html: payload.html,
@@ -28,13 +28,13 @@ const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
   try {
     const [response] = await sgMail.send(msg);
     Log.info("SendGrid response:", {
-      statusCode:   response.statusCode,
-      headers:      response.headers,
+      statusCode: response.statusCode,
+      headers: response.headers,
     });
     return {
       provider: "sendgrid",
-      status:   response.statusCode,
-      headers:  response.headers,
+      status: response.statusCode,
+      headers: response.headers,
     };
   } catch (err: any) {
     Log.error("SendGrid error:", err);
@@ -43,7 +43,7 @@ const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
       error: inspect(err),
     };
   }
-}
+};
 
 const sendEmailThroughMailjet = async (
   emailInfoList: {
@@ -58,7 +58,9 @@ const sendEmailThroughMailjet = async (
     CustomID?: string;
   }[]
 ): Promise<Object> => {
-  console.log(`API keys: ${process.env.MAILJET_API_KEY} and ${process.env.MAILJET_SECRET_KEY}`);
+  console.log(
+    `API keys: ${process.env.MAILJET_API_KEY} and ${process.env.MAILJET_SECRET_KEY}`
+  );
   const mailjet = Mailjet.apiConnect(
     process.env.MAILJET_API_KEY as string,
     process.env.MAILJET_SECRET_KEY as string
@@ -76,51 +78,59 @@ const sendEmailThroughMailjet = async (
   };
 
   try {
-    const result = await mailjet
-      .post("send", { version: "v3.1" })
-      .request({
-        "Messages": emailInfoList,
-      });
-    console.log(`Email sent result: ${JSON.stringify(result, null, 2)}`);
-//    Log.info("Email sent result:", result.body);
+    const result = await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: emailInfoList,
+    });
     unifiedResponse.type = "response";
     unifiedResponse.status = result.response.status;
     unifiedResponse.statusText = result.response.statusText;
     unifiedResponse.headers = result.response.headers;
     unifiedResponse.config = result.response.config;
     unifiedResponse.body = result.body;
-    console.log(`Email sent result: ${JSON.stringify(unifiedResponse, null, 2)}`);
+    Log.info(
+      `Email sent result: ${JSON.stringify(unifiedResponse, null, 2)}`
+    );
   } catch (error) {
     unifiedResponse.type = "error";
     unifiedResponse.message = inspect(error);
-    console.log(`Email sent error: ${unifiedResponse.message}`);
+    Log.info(`Email sent error: ${unifiedResponse.message}`);
     throw error;
   }
   return unifiedResponse;
 };
 
-const sendEmail = async ( 
-  senderName: string, 
+const sendEmail = async (
+  serviceName: "mailjet" | "sendgrid" = "sendgrid",
+  senderName: string,
   senderAddress: string,
-  recipientNameAddressList: { name: string, address: string }[],
+  recipientNameAddressList: { name: string; address: string }[],
   subject: string,
   textContent: string,
   htmlContent?: string,
   customID: string = "JustIn Email Notification"
-): Promise<Object> => {
+): Promise<object> => {
+  if (serviceName === "sendgrid") {
+    return sendWithSendGrid({
+      from: { name: senderName, email: senderAddress },
+      to: recipientNameAddressList,
+      subject,
+      text: textContent,
+      html: htmlContent,
+    });
+  }
   const emailInfoList = recipientNameAddressList.map(
     ({ name: recipientName, address: recipientAddress }) => ({
       From: { Email: senderAddress, Name: senderName },
       To: [{ Email: recipientAddress, Name: recipientName }],
       Subject: subject,
       TextPart: textContent,
-      HTMLPart: htmlContent? `${htmlContent}` : `<p>${textContent}</p>`,
-      CustomID: customID
-    }
-  ));
+      HTMLPart: htmlContent ? `${htmlContent}` : `<p>${textContent}</p>`,
+      CustomID: customID,
+    })
+  );
   return sendEmailThroughMailjet(emailInfoList);
 };
 
-export const EmailUtility =  {
-    sendEmail
+export const EmailUtility = {
+  sendEmail,
 };
