@@ -70,7 +70,7 @@ const doAction = async (
     const tag = ContentTag.Persuasive;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
     const sendStatus = await EmailUtility.sendEmail(
-      "mailjet",
+      "sendgrid",
       "BreakAway Notification",
       process.env.VERIFIED_SENDER_EMAIL as string,
       [{ name: user.attributes.name, address: user.attributes.email }],
@@ -92,14 +92,14 @@ const doAction = async (
     const tag = ContentTag.Generic;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
         const sendStatus = await EmailUtility.sendEmail(
-      "mailjet",
+      "sendgrid",
       "BreakAway Notification",
       process.env.VERIFIED_SENDER_EMAIL as string,
       [{ name: user.attributes.name, address: user.attributes.email }],
       "BreakAway Notification",
       interventionMessage,
       `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
-      
+
     returnObject = {
       status: "success",
       result: {
