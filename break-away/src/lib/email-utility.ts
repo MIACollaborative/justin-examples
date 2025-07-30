@@ -28,7 +28,7 @@ const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
   try {
     const [response] = await sgMail.send(msg);
     Log.info("SendGrid response:", {
-      statusCode: response.statusCode,
+      status: response.statusCode,
       headers: response.headers,
     });
     return {
@@ -58,45 +58,32 @@ const sendEmailThroughMailjet = async (
     CustomID?: string;
   }[]
 ): Promise<Object> => {
-  console.log(
-    `API keys: ${process.env.MAILJET_API_KEY} and ${process.env.MAILJET_SECRET_KEY}`
-  );
   const mailjet = Mailjet.apiConnect(
     process.env.MAILJET_API_KEY as string,
     process.env.MAILJET_SECRET_KEY as string
   );
 
-  let unifiedResponse = {
-    type: "default type",
-    status: -1,
-    statusText: "default status",
-    message: "default message",
-    headers: {},
-    config: {},
-    request: {},
-    body: {},
-  };
-
   try {
     const result = await mailjet.post("send", { version: "v3.1" }).request({
       Messages: emailInfoList,
     });
-    unifiedResponse.type = "response";
-    unifiedResponse.status = result.response.status;
-    unifiedResponse.statusText = result.response.statusText;
-    unifiedResponse.headers = result.response.headers;
-    unifiedResponse.config = result.response.config;
-    unifiedResponse.body = result.body;
-    Log.info(
-      `Email sent result: ${JSON.stringify(unifiedResponse, null, 2)}`
-    );
+    Log.info("Mailjet response:", {
+      status: result.response.status,
+      headers: result.response.headers,
+    });
+    return {
+      provider: "mailjet",
+      status: result.response.status,
+      headers: result.response.headers,
+    };
+    
   } catch (error) {
-    unifiedResponse.type = "error";
-    unifiedResponse.message = inspect(error);
-    Log.info(`Email sent error: ${unifiedResponse.message}`);
-    throw error;
+    Log.error("Mailjet error:", error);
+    return {
+      provider: "mailjet",
+      error: inspect(error),
+    };
   }
-  return unifiedResponse;
 };
 
 const sendEmail = async (
