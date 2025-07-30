@@ -27,10 +27,6 @@ const sendWithSendGrid = async (payload: EmailPayload): Promise<any> => {
 
   try {
     const [response] = await sgMail.send(msg);
-    Log.info("SendGrid response:", {
-      status: response.statusCode,
-      headers: response.headers,
-    });
     return {
       provider: "sendgrid",
       status: response.statusCode,
@@ -66,10 +62,6 @@ const sendEmailThroughMailjet = async (
   try {
     const result = await mailjet.post("send", { version: "v3.1" }).request({
       Messages: emailInfoList,
-    });
-    Log.info("Mailjet response:", {
-      status: result.response.status,
-      headers: result.response.headers,
     });
     return {
       provider: "mailjet",

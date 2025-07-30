@@ -1,9 +1,8 @@
 import { DecisionRuleRegistration, JEvent, JUser, Log, StepReturnResult } from "@just-in/core";
 import { MessageBank } from "../lib/message-bank";
-import { sendGridSendEmail } from "../lib/sendgrid/send-mail";
 import { EmailUtility } from "../lib/email-utility"
 const name: string =  'sendEmailDecisionRule';
-const minutesBetweenEmails: number = 2;
+const minutesBetweenEmails: number = 60;
 const probabilityOfPersuasiveEmail: number = 0.5;
 const checkinFormLink = process.env.CHECKIN_FORM_LINK as string;
 

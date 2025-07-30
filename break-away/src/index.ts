@@ -1,4 +1,4 @@
-import JustIn, { Log, JUser, JEvent, StepReturnResult, DecisionRuleRegistration } from '@just-in/core';
+import JustIn from '@just-in/core';
 import { config } from "dotenv";
 import { MessageBank } from './lib/message-bank';
 import { UserHelper } from './lib/user-helper';
