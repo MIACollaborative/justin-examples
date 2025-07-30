@@ -99,14 +99,7 @@ const doAction = async (
       "BreakAway Notification",
       interventionMessage,
       `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
-
-    /*
-    const sendStatus = await sendGridSendEmail(
-      user.attributes.email, 
-      "BreakAway Notification", 
-      interventionMessage,
-      `<p>Hi ${user.attributes.name}</p><p>${interventionMessage}</p><p>Check-in here: <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">Google Form</a></p>`);
-    */
+      
     returnObject = {
       status: "success",
       result: {
