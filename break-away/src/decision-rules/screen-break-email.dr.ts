@@ -28,8 +28,9 @@ const shouldActivate = async (
 
   if (roundedMinutes % minutesBetweenEmails === 0) {
     status = 'success';
-  } else {
-    console.log(`${event.generatedTimestamp?.toISOString()} - ${name} did not activate for user: ${user.uniqueIdentifier} (${user.attributes.name})`);
+  }
+  else {
+    //console.log(`${event.generatedTimestamp?.toISOString()} - ${name} did not activate for user: ${user.uniqueIdentifier} (${user.attributes.name})`);
   }
 
   return { status: status, result: {} };
