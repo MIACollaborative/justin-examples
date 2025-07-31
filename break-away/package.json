@@ -30,9 +30,10 @@
   "author": "MIA Collaborative",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@just-in/core": "^0.0.9",
+    "@sendgrid/mail": "^8.1.5",
     "dotenv": "^17.2.0",
     "node-mailjet": "^6.0.8",
-    "papaparse": "^5.5.3",
-    "@sendgrid/mail": "^8.1.5"
+    "papaparse": "^5.5.3"
   }
 }
