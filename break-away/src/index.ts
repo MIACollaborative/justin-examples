@@ -14,8 +14,7 @@ async function main() {
     dev: false,
     info: true,
     warn: true,
-    error: true,
-    handlerResults: false,
+    error: true
   });
 
   await justIn.init();

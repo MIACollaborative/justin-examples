@@ -1,7 +1,7 @@
 import { DecisionRuleRegistration, JEvent, JUser, Log, StepReturnResult } from "@just-in/core";
 import { MessageBank } from "../lib/message-bank";
 import { EmailUtility } from "../lib/email-utility"
-const name: string =  'sendEmailDecisionRule';
+const name: string = 'sendEmailDecisionRule';
 const minutesBetweenEmails: number = 60;
 const probabilityOfPersuasiveEmail: number = 0.5;
 const checkinFormLink = process.env.CHECKIN_FORM_LINK as string;
@@ -57,19 +57,20 @@ const selectAction = async (
 };
 
 const doAction = async (
-  user: JUser, 
-  event: JEvent, 
+  user: JUser,
+  event: JEvent,
   previousResult: StepReturnResult
 ): Promise<StepReturnResult<any>> => {
 
   const { action } = previousResult.result as Record<string, any>;
   let returnObject: StepReturnResult<any>;
   let interventionMessage: string;
+  const emailServiceProvider: "sendgrid" | "mailjet" = "sendgrid";
   if (action === Action.SendPersuasiveEmail) {
     const tag = ContentTag.Persuasive;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
     const sendStatus = await EmailUtility.sendEmail(
-      "sendgrid",
+      emailServiceProvider,
       "BreakAway Notification",
       process.env.VERIFIED_SENDER_EMAIL as string,
       [{ name: user.attributes.name, address: user.attributes.email }],
@@ -90,8 +91,8 @@ const doAction = async (
   } else {
     const tag = ContentTag.Generic;
     interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
-        const sendStatus = await EmailUtility.sendEmail(
-      "sendgrid",
+    const sendStatus = await EmailUtility.sendEmail(
+      emailServiceProvider,
       "BreakAway Notification",
       process.env.VERIFIED_SENDER_EMAIL as string,
       [{ name: user.attributes.name, address: user.attributes.email }],
