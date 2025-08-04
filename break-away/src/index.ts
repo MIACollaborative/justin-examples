@@ -20,7 +20,7 @@ async function main() {
   await justIn.init();
   
   const usersToAdd = await UserHelper.loadUsers();
-  await justIn.addUsersToDatabase(usersToAdd);
+  await justIn.addUsers(usersToAdd);
   await MessageBank.loadMessages();
 
   const intervalInMilliseconds = 60 * 1000; // 1 minute
