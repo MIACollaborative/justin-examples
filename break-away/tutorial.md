@@ -23,7 +23,7 @@ PT2_EMAIL="[participant 2 email]"
 Initialize database and load users
 ```
 await JustIn.initializeDB(DBType.MONGO);
-await JustIn.addUsersToDatabase([
+await JustIn.addUsers([
     {participantId: "pt1", email: process.env.PT1_EMAIL, attributes: {timezone: "America/Detroit"}},
     {participantId: "pt2", email: process.env.PT2_EMAIL, attributes: {timezone: "America/Chicago"}},
 ]);
