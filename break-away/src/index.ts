@@ -12,17 +12,22 @@ async function main() {
   
   justIn.setLoggingLevels({
     dev: false,
-    info: true,
+    info: false,
     warn: true,
     error: true
   });
 
+  // Initialize JustIn
   await justIn.init();
   
+  // Load users from CSV file
   const usersToAdd = await UserHelper.loadUsers();
   await justIn.addUsers(usersToAdd);
+
+  // Load messages from CSV file
   await MessageBank.loadMessages();
 
+  // Create a timer to generate events every minute
   const intervalInMilliseconds = 60 * 1000; // 1 minute
   const intervalTimerEventType = 'intervalTimerEvent';
   justIn.createIntervalTimerEventGenerator(
@@ -30,9 +35,11 @@ async function main() {
     intervalInMilliseconds,
   );
 
+  // Register a decision rule and assign it to the timer event
   justIn.registerDecisionRule(ScreenBreakEmailDecisionRule);
   justIn.registerEventHandlers(intervalTimerEventType, [ScreenBreakEmailDecisionRule.name]);
 
+  // Start the engine
   await justIn.startEngine();
 }
 
