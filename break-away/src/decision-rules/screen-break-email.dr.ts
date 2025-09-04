@@ -12,7 +12,7 @@ const enum Action {
   SendGenericEmail = 'SendGenericEmail',
 }
 
-const enum ContentTag {
+const enum ContentType {
   Persuasive = 'persuasive',
   Generic = 'generic',
 }
@@ -37,7 +37,10 @@ const shouldActivate = async (
   }
   else {
     // For demo purposes, print the "do not activate" result
-    console.log(`${event.generatedTimestamp?.toISOString()} - ${name} did not activate for user: ${user.uniqueIdentifier} (${user.attributes.preferred_name})`);
+    console.log(`
+      ${event.generatedTimestamp?.toISOString()} - ${name} 
+      did not activate for user: ${user.uniqueIdentifier} (${user.attributes.preferred_name})
+    `);
   }
 
   // If status is "stop", this rule will not activate and other steps will not run
@@ -51,13 +54,14 @@ const selectAction = async (
   _previousResult: StepReturnResult
 ): Promise<StepReturnResult> => {
 
-  // Default to sending a generic email
-  let action: Action = Action.SendGenericEmail;
+  let action: Action;
 
   // Roll the dice to determine if we should send a persuasive email
   const diceRoll = Math.random();
   if (diceRoll < probabilityOfPersuasiveEmail) {
     action = Action.SendPersuasiveEmail;
+  } else {
+    action = Action.SendGenericEmail;
   }
 
   return {
@@ -74,94 +78,62 @@ const doAction = async (
   previousResult: StepReturnResult
 ): Promise<StepReturnResult<any>> => {
 
+  // Get the action from the previous result
   const { action } = previousResult.result as Record<string, any>;
-  let returnObject: StepReturnResult<any>;
-  let interventionMessage: string;
+
+  // Set the email service provider
   const emailServiceProvider: "sendgrid" | "mailjet" = "sendgrid";
 
-  // If the result of selectAction was to send a persuasive email, send it
+  let contentType: ContentType;
+
+  // Check the selected action and determine the type of message
   if (action === Action.SendPersuasiveEmail) {
-
-    // Get a random message from the message bank with the persuasive tag
-    const tag = ContentTag.Persuasive;
-    interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
-
-    // Send the email
-    const sendStatus = await EmailUtility.sendEmail(
-      emailServiceProvider,
-      "BreakAway Notification",
-      process.env.VERIFIED_SENDER_EMAIL as string,
-      [{ name: user.attributes.preferred_name, address: user.attributes.email }],
-      "BreakAway Notification",
-      interventionMessage,
-      `
-        <p>Hi ${user.attributes.preferred_name}</p>
-        <p>${interventionMessage}</p>
-        <p>Check-in here: 
-          <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">
-            Google Form
-          </a>
-        </p>
-      `
-    );
-
-    // Return a detailed result to be logged for later analysis
-    returnObject = {
-      status: "success",
-      result: {
-        message: 'Action taken',
-        action: action,
-        sendStatus: sendStatus,
-        contentTag: tag,
-        contentMessage: interventionMessage,
-      },
-    };
-  } 
-
-  // If the result of selectAction was to send a generic email, send it
-  else {
-    // Get a random message from the message bank with the generic tag
-    const tag = ContentTag.Generic;
-    interventionMessage = MessageBank.getMessageRandomlyByTag(tag);
-
-    // Send the email
-    const sendStatus = await EmailUtility.sendEmail(
-      emailServiceProvider,
-      "BreakAway Notification",
-      process.env.VERIFIED_SENDER_EMAIL as string,
-      [{ name: user.attributes.preferred_name, address: user.attributes.email }],
-      "BreakAway Notification",
-      interventionMessage,
-      `
-        <p>Hi ${user.attributes.preferred_name}</p>
-        <p>${interventionMessage}</p>
-        <p>Check-in here: 
-          <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">
-            Google Form
-          </a>
-        </p>
-      `
-    );
-
-    // Return a detailed result to be logged for later analysis
-    returnObject = {
-      status: "success",
-      result: {
-        message: 'Action taken',
-        action: action,
-        sendStatus: sendStatus,
-        contentTag: tag,
-        contentMessage: interventionMessage,
-      },
-    };
+    contentType = ContentType.Persuasive;
+  } else {
+    contentType = ContentType.Generic;
   }
-  // For demo purposes, print the action taken and the message sent
+
+  // Get a random message from the message bank based on the content type
+  const messageContent = MessageBank.getMessageRandomlyByTag(contentType);
+
+  // Send the email
+  const sendStatus = await EmailUtility.sendEmail(
+    emailServiceProvider,
+    "BreakAway Notification",
+    process.env.VERIFIED_SENDER_EMAIL as string,
+    [{ name: user.attributes.preferred_name, address: user.attributes.email }],
+    "BreakAway Notification",
+    messageContent,
+    `
+      <p>Hi ${user.attributes.preferred_name}</p>
+      <p>${messageContent}</p>
+      <p>Check-in here: 
+        <a href="${checkinFormLink.replace('[email]', user.attributes.email)}">
+          Google Form
+        </a>
+      </p>
+    `
+  );
+
+  // For demo purposes, print the action and result 
   console.log(`
-    ${event.generatedTimestamp?.toISOString()} - Action ${action} taken for user: 
-    ${user.uniqueIdentifier} (${user.attributes.preferred_name}). 
-    Message sent: ${interventionMessage}
+    ${event.generatedTimestamp?.toISOString()} - ${name} 
+    sent ${action} email to user: ${user.uniqueIdentifier} (${user.attributes.preferred_name})  
+    with content type: ${contentType}
+    and message: ${messageContent}
   `);
-  return returnObject;
+
+  // Return a detailed result to be logged for later analysis
+  return {
+    status: "success",
+    result: {
+      message: 'Action taken',
+      action: action,
+      sendStatus: sendStatus,
+      contentType: contentType,
+      messageContent: messageContent,
+    },
+  };
 }
 
 export const ScreenBreakEmailDecisionRule: DecisionRuleRegistration = {
