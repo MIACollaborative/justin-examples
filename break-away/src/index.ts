@@ -10,6 +10,7 @@ async function main() {
 
   const justIn = JustIn();
   
+  // For demo purposes, turn off most logging
   justIn.setLoggingLevels({
     dev: false,
     info: false,
