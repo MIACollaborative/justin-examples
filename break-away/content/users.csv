@@ -1,4 +1,4 @@
-study_id,email,timezone,name
-P1,breakaway-recipient@umich.edu,America/Detroit,Mark
-P2,breakaway-recipient@umich.edu,America/Chicago,José
-P3,breakaway-recipient@umich.edu,America/Detroit,Pei-Yao
+study_id,preferred_name,email
+P1,Mark,breakaway-recipient@umich.edu
+P2,Pei-Yao,breakaway-recipient@umich.edu
+P3,Jose,breakaway-recipient@umich.edu
