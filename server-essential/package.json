@@ -1,0 +1,16 @@
+{
+  "name": "server-essential",
+  "version": "1.0.0",
+  "description": "",
+  "author": "MIA Collaborative",
+  "license": "BSD-3-Clause",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "yarn build && node dist/index.js",
+    "clean": "rm -rf dist",
+    "build": "tsc"
+  }
+}
