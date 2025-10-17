@@ -12,5 +12,12 @@
     "start": "yarn build && node dist/index.js",
     "clean": "rm -rf dist",
     "build": "tsc"
+  },
+  "dependencies": {
+    "@just-in/core": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.8.1",
+    "typescript": "^5.9.3"
   }
 }

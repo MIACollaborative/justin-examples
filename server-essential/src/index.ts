@@ -2,14 +2,13 @@
 // It is here for demonstration / testing purposes only
 // This will not be part of the actual just-in server package
 
-import { JAppServer, JAppServer2, DEFAULT_GUARDS, HTTPMethods } from 'src'; // eventually, @just-in/server (or core for Log, depends on future decision)
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods } from '@just-in/server';
 import JustIn, { Log } from '@just-in/core';
-import { Logger } from 'src/server/justin-core'; // need type export from @just-in/core in the future?
-import { guardGeneric, requestTokenValidatorGuard } from './guards';
+import { guardGeneric, requestTokenValidatorGuard } from "./guards/index"
 
+import { Logger } from 'src/server/justin-core'; // need type export from @just-in/core in the future?
 // option 1: let the server create its own JustIn instance
-//const server = JAppServer();
-const server = JAppServer2();
+const server = JAppServer();
 const port = process.env.PORT || 3001;
 
 // option 2: pass in your own JustIn instance
