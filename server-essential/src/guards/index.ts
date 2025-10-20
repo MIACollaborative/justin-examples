@@ -1,5 +1,4 @@
-import { Log } from "@just-in/core";
-import { JGuard, Request, Response, NextFunction } from "@just-in/server";
+import { JGuard, Request, Response, NextFunction, Log } from "@just-in/server";
 
 /**
  * A generic guard that allows all requests.

@@ -1,9 +1,4 @@
-// This is the example server script that shows how to use just-in server
-// It is here for demonstration / testing purposes only
-// This will not be part of the actual just-in server package
-
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, Logger } from '@just-in/server';
-import JustIn, { Log } from '@just-in/core';
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger } from '@just-in/server';
 import { guardGeneric, requestTokenValidatorGuard } from "./guards/index"
 
 // option 1: let the server create its own JustIn instance
