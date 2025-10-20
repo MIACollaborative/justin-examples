@@ -1,9 +1,5 @@
-// It is here for demonstration purposes only
-// This will not be part of the actual just-in server package
-
-import { Request, Response, NextFunction } from "express";
 import { Log } from "@just-in/core";
-import { JGuard } from "src/server/server.type";
+import { JGuard, Request, Response, NextFunction } from "@just-in/server";
 
 /**
  * A generic guard that allows all requests.
