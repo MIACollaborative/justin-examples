@@ -1,3 +1,3 @@
 import { usersGuardsMap } from "./guards-map";
-import { guardGeneric, requestTokenValidatorGuard } from "./guards";
-export { usersGuardsMap, guardGeneric, requestTokenValidatorGuard };
+import { guardOverride, guardGeneric, requestTokenValidatorGuard } from "./guards";
+export { usersGuardsMap, guardGeneric, guardOverride, requestTokenValidatorGuard };
