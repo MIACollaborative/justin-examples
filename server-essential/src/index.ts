@@ -1,22 +1,31 @@
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger } from '@just-in/server';
-import { guardGeneric, requestTokenValidatorGuard } from "./guards/index"
-
-// option 1: let the server create its own JustIn instance
-const server = JAppServer();
-const port = process.env.PORT || 3001;
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration } from '@just-in/server';
+import { usersGuardsMap, guardGeneric, requestTokenValidatorGuard } from "./guards/index"
 
 // option 2: pass in your own JustIn instance
-/*
+
 const justIn = JustIn();
+
+const customConfig: JAppServerConfiguration = {
+  endpointGuardsMap: usersGuardsMap,
+  justIn: justIn
+};
+
+
 
 // set your logging levels here, before passing into server
 justIn.setLoggingLevels({
-  dev: false,
+  dev: true,
   info: true,
   warn: true,
   error: true
 });
-*/
+
+// option 1: let the server create its own JustIn instance
+const server = JAppServer(customConfig);
+const port = process.env.PORT || 3001;
+
+
+
 
 // optionally, assign your own logger
 // otherwise it will use the default console logger (Log) from just-in core
