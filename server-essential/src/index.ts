@@ -7,6 +7,9 @@ const justIn = JustIn();
 
 const customConfig: JAppServerConfiguration = {
   endpointGuardsMap: usersGuardsMap,
+
+  // TODO: we will decide whether to do it this way and if it is needed.
+  // I will setup a method for people to setLoggingLevels through the server instance.
   justIn: justIn
 };
 
