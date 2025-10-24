@@ -1,5 +1,5 @@
 import { HTTPMethods, JGuard, DEFAULT_GUARDS } from "@just-in/server";
-import { guardGeneric, permissionGuardGeneric, requestTokenValidatorGuard } from "./guards";
+import { guardCustom } from "./guards";
 
 const usersGuardsMap = new Map<
     string,
@@ -9,20 +9,22 @@ const usersGuardsMap = new Map<
   usersGuardsMap.set("/api/users", new Map());
   usersGuardsMap
     .get("/api/users")
-    ?.set(HTTPMethods.GET, [guardGeneric]);
-  usersGuardsMap
+    ?.set(HTTPMethods.GET, [guardCustom]);
+
+    usersGuardsMap
     .get("/api/users")
-    ?.set(HTTPMethods.POST, [guardGeneric]);
+    ?.set(HTTPMethods.POST, [guardCustom]);
+
   usersGuardsMap.set("/api/users/:userUniqueIdentifier", new Map());
   usersGuardsMap
     .get("/api/users/:userUniqueIdentifier")
-    ?.set(HTTPMethods.GET, [guardGeneric]);
+    ?.set(HTTPMethods.GET, [guardCustom]);
   usersGuardsMap
     .get("/api/users/:userUniqueIdentifier")
-    ?.set(HTTPMethods.PATCH, [guardGeneric]);
+    ?.set(HTTPMethods.PATCH, [guardCustom]);
   usersGuardsMap
     .get("/api/users/:userUniqueIdentifier")
-    ?.set(HTTPMethods.DELETE, [guardGeneric]);
+    ?.set(HTTPMethods.DELETE, [guardCustom]);
 
 
 export { usersGuardsMap };

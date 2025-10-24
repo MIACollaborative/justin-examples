@@ -1,6 +1,61 @@
 import { JGuard, Request, Response, NextFunction, Log } from "@just-in/server";
 
 /**
+ * A custom guard that allows all requests.
+ * This guard simply logs and allows all requests to proceed.
+ */
+const guardCustom: JGuard = Object.assign(
+  /**
+   * A custom guard based on Express middleware
+   * @param req - Express request object
+   * @param res - Express response object
+   * @param next - Express next function
+   */
+  (req: Request, res: Response, next: NextFunction) => {
+    Log.dev('Custom guard!');
+    next();
+  },
+  {
+    /**
+     * Returns the name of the guard.
+     */
+    getName: () => 'guardCustom',
+    /**
+     * Returns the configuration for the guard.
+     */
+    getConfiguration: () => ({ description: 'A custom guard that allows all requests.' })
+  }
+);
+
+/**
+ * A custom guard that allows all requests.
+ * This guard simply logs and allows all requests to proceed.
+ */
+const guardOverride: JGuard = Object.assign(
+  /**
+   * A custom guard based on Express middleware
+   * @param req - Express request object
+   * @param res - Express response object
+   * @param next - Express next function
+   */
+  (req: Request, res: Response, next: NextFunction) => {
+    Log.dev('Override guard!');
+    next();
+  },
+  {
+    /**
+     * Returns the name of the guard.
+     */
+    getName: () => 'guardOverride',
+    /**
+     * Returns the configuration for the guard.
+     */
+    getConfiguration: () => ({ description: 'An override guard that allows all requests.' })
+  }
+);
+
+
+/**
  * A generic guard that allows all requests.
  * This guard simply logs and allows all requests to proceed.
  */
@@ -90,4 +145,5 @@ const requestTokenValidatorGuard: JGuard = Object.assign(
   }
 );
 
-export { guardGeneric, permissionGuardGeneric, requestTokenValidatorGuard };
+
+export { guardCustom, guardOverride, guardGeneric, permissionGuardGeneric, requestTokenValidatorGuard };
