@@ -1,4 +1,4 @@
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration } from '@just-in/server';
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, requestTokenValidatorGuard } from "./guards/index"
 
 // option 2: pass in your own JustIn instance
@@ -9,7 +9,7 @@ let customConfig: JAppServerConfiguration | undefined  = undefined;
 
 
 customConfig = {
-  endpointGuardsMap: usersGuardsMap,
+  //endpointGuardsMap: usersGuardsMap,
 
   // TODO: we will decide whether to do it this way and if it is needed.
   // I will setup a method for people to setLoggingLevels through the server instance.
@@ -51,12 +51,20 @@ const myLogger: Logger = {
 };
 //server.configureLogger(myLogger);
 
-const usersGetEndpoint = EndpoingManager.getEndpoint({ path: '/api/users', method: HTTPMethods.GET });
+const usersGetEndpoint: Endpoint | null = EndpointManager.getEndpoint('/api/users', HTTPMethods.GET);
 
-usersGetEndpoint.getGuards();
-usersGetEndpoint.getController();
-usersGetEndpoint.setGuards();
-usersGetEndpoint.setController();
+if (usersGetEndpoint) {
+  const guards = usersGetEndpoint.getGuards();
+  console.log("Guards:", guards.map(guard => guard.getName()));
+  usersGetEndpoint.setGuards([guardOverride]);
+  console.log("Guards after setGuards:", EndpointManager.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map(guard => guard.getName()));
+
+  const controller = usersGetEndpoint.getController();
+  console.log("Controller:", controller.toString());
+  const newController: RequestHandler = (req: Request, res: Response) => { res.send('New controller!'); };
+  usersGetEndpoint.setController(newController);
+  console.log("Controller after setController:", EndpointManager.getEndpoint('/api/users', HTTPMethods.GET)!.getController().toString());
+}
 
 
 
