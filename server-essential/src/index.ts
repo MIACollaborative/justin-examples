@@ -51,6 +51,21 @@ const myLogger: Logger = {
 };
 //server.configureLogger(myLogger);
 
+const usersGetEndpoint = EndpoingManager.getEndpoint({ path: '/api/users', method: HTTPMethods.GET });
+
+usersGetEndpoint.getGuards();
+usersGetEndpoint.getController();
+usersGetEndpoint.setGuards();
+usersGetEndpoint.setController();
+
+
+
+
+
+
+
+
+
 /*
 // override guards, leave the controller intact
 server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
@@ -63,12 +78,11 @@ server.overrideDefaultEndpoint(
 
 // Issue a warning, as /api/notexist is not handled by default configuration
 server.overrideDefaultEndpoint({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
-*/
+
 // add new endpoints
 // note that the did not use default guards
 server.registerEndpoint({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardOverride], controller: (req, res) => { res.send('Hello!'); }});
 
-/*
 server.registerEndpoint({path: '/api/test/hi', method: HTTPMethods.GET, guards: [guardOverride], controller: (req, res) => { res.send('Hi!'); }});
 server.registerEndpoint({path: '/api/test/yo', method: HTTPMethods.GET, guards: [guardOverride], controller: (req, res) => { res.send('Yo!'); }});
 server.registerEndpoint({path: '/api/test/token', method: HTTPMethods.GET, guards: [requestTokenValidatorGuard], controller: (req, res) => { res.send('Token!'); }});
