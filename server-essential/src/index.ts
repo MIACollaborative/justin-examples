@@ -1,5 +1,6 @@
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler } from '@just-in/server';
-import { usersGuardsMap, guardOverride, guardGeneric, requestTokenValidatorGuard } from "./guards/index"
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, EndpointRoute } from '@just-in/server';
+import { usersGuardsMap, guardOverride, guardGeneric, requestTokenValidatorGuard } from "./guards/index";
+import util from 'util';
 
 // option 2: pass in your own JustIn instance
 
@@ -54,24 +55,37 @@ const myLogger: Logger = {
 const usersGetEndpoint: Endpoint | null = EndpointManager.getEndpoint('/api/users', HTTPMethods.GET);
 
 if (usersGetEndpoint) {
+  // get default guards
   const guards = usersGetEndpoint.getGuards();
   console.log("Guards:", guards.map(guard => guard.getName()));
+
+  // override guards
   usersGetEndpoint.setGuards([guardOverride]);
   console.log("Guards after setGuards:", EndpointManager.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map(guard => guard.getName()));
 
+  // get default controller
   const controller = usersGetEndpoint.getController();
   console.log("Controller:", controller.toString());
+  
+  // override controller
   const newController: RequestHandler = (req: Request, res: Response) => { res.send('New controller!'); };
   usersGetEndpoint.setController(newController);
   console.log("Controller after setController:", EndpointManager.getEndpoint('/api/users', HTTPMethods.GET)!.getController().toString());
 }
 
+// add a new endpoint
+const newEndpointConfig = {path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardGeneric], controller: (req: Request, res: Response) => { res.send('Hello!'); }};
+
+const newEndpoint:Endpoint = EndpointManager.addEndpoint(newEndpointConfig) as Endpoint;
+console.log("New endpoint added:", util.inspect(newEndpoint));
 
 
+const allEndpointRoutes: EndpointRoute[] = EndpointManager.getAllEndpointRoutes();
+console.log("All endpoint routes:", allEndpointRoutes);
 
 
-
-
+const allEndpointBases: string[] = EndpointManager.getAllEndpointBases();
+console.log("All endpoint bases:", allEndpointBases);
 
 
 /*
