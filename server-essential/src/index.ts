@@ -1,4 +1,4 @@
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, EndpointRoute } from '@just-in/server';
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, EndpointRoute, JGuard } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -57,11 +57,11 @@ const usersGetEndpoint: Endpoint | null = EndpointManager.getEndpoint('/api/user
 if (usersGetEndpoint) {
   // get default guards
   const guards = usersGetEndpoint.getGuards();
-  console.log("Guards:", guards.map(guard => guard.getName()));
+  console.log("Guards:", guards.map((guard: JGuard) => guard.getName()));
 
   // override guards
   usersGetEndpoint.setGuards([guardOverride]);
-  console.log("Guards after setGuards:", EndpointManager.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map(guard => guard.getName()));
+  console.log("Guards after setGuards:", EndpointManager.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: JGuard) => guard.getName()));
 
   // get default controller
   const controller = usersGetEndpoint.getController();
