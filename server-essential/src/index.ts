@@ -51,6 +51,42 @@ const myLogger: Logger = {
   },
 };
 //server.configureLogger(myLogger);
+
+// v2: use Endpoint solely as interface, no longer using JEndpointsConfiguration (basePath) and JEndpointConfiguration
+/*
+// TODO: provide getEndpoint method in server
+const usersGetEndpoint: Endpoint | null = EndpointManager.getEndpointV2('/api/users', HTTPMethods.GET) as Endpoint;
+Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
+// get default guards
+const guards = usersGetEndpoint.getGuards();
+console.log("Guards:", guards.map((guard: JGuard) => guard.getName()));
+
+// override guards
+usersGetEndpoint.setGuards([guardOverride]);
+console.log("Guards after setGuards:", EndpointManager.getEndpointV2('/api/users', HTTPMethods.GET)!.getGuards().map((guard: JGuard) => guard.getName()));
+
+// get default controller
+const controller = usersGetEndpoint.getController();
+console.log("Controller:", controller.toString());
+
+// override controller
+const newController: RequestHandler = (req: Request, res: Response) => { res.send('New controller!'); };
+usersGetEndpoint.setController(newController);
+console.log("Controller after setController:", EndpointManager.getEndpointV2('/api/users', HTTPMethods.GET)!.getController().toString());
+*/
+
+
+// original methods
+server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardGeneric], controller: (req, res) => { res.send('Hello!'); }});
+//server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
+
+// try overriding all guards
+// TODO: provide getEndpoints method in server
+EndpointManager.getEndpointsV2().forEach((endpoint: Endpoint) => {
+  endpoint.setGuards([guardOverride]);
+});
+
+// v1: use Endpoint as interface, still using JEndpointsConfiguration (basePath) and JEndpointConfiguration
 /*
 const usersGetEndpoint: Endpoint | null = EndpointManager.getEndpoint('/api/users', HTTPMethods.GET);
 
