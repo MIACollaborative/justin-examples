@@ -51,7 +51,7 @@ const myLogger: Logger = {
   },
 };
 //server.configureLogger(myLogger);
-
+/*
 const usersGetEndpoint: Endpoint | null = EndpointManager.getEndpoint('/api/users', HTTPMethods.GET);
 
 if (usersGetEndpoint) {
@@ -86,7 +86,7 @@ console.log("All endpoint routes:", allEndpointRoutes);
 
 const allEndpointBases: string[] = EndpointManager.getAllEndpointBases();
 console.log("All endpoint bases:", allEndpointBases);
-
+*/
 
 /*
 // override guards, leave the controller intact
