@@ -1,5 +1,29 @@
 import { JGuard, Request, Response, NextFunction, Log } from "@just-in/server";
 
+const guardThrowError: JGuard = Object.assign(
+  /**
+   * A custom guard based on Express middleware
+   * @param req - Express request object
+   * @param res - Express response object
+   * @param next - Express next function
+   */
+  (req: Request, res: Response, next: NextFunction) => {
+    Log.dev('Throw error guard!');
+    throw new Error('Throw error guard!');
+    next();
+  },
+  {
+    /**
+     * Returns the name of the guard.
+     */
+    getName: () => 'guardThrowError',
+    /**
+     * Returns the configuration for the guard.
+     */
+    getConfiguration: () => ({ description: 'A guard that throws an error.' })
+  }
+);
+
 /**
  * A custom guard that allows all requests.
  * This guard simply logs and allows all requests to proceed.
@@ -146,4 +170,4 @@ const requestTokenValidatorGuard: JGuard = Object.assign(
 );
 
 
-export { guardCustom, guardOverride, guardGeneric, permissionGuardGeneric, requestTokenValidatorGuard };
+export { guardCustom, guardOverride, guardGeneric, guardThrowError, permissionGuardGeneric, requestTokenValidatorGuard };

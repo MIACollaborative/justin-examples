@@ -1,5 +1,5 @@
 import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, EndpointRoute, JGuard } from '@just-in/server';
-import { usersGuardsMap, guardOverride, guardGeneric, requestTokenValidatorGuard } from "./guards/index";
+import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
 // option 2: pass in your own JustIn instance
@@ -77,14 +77,16 @@ console.log("Controller after setController:", server.getEndpoint('/api/users', 
 
 
 // original methods
-server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardGeneric], controller: (req, res) => { res.send('Hello!'); }});
-//server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
+server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+// server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
 
 // try overriding all guards
 // TODO: provide getEndpoints method in server
+/*
 server.getEndpoints().forEach((endpoint: Endpoint) => {
   endpoint.setGuards([guardOverride]);
 });
+*/
 
 // v1: use Endpoint as interface, still using JEndpointsConfiguration (basePath) and JEndpointConfiguration
 /*
@@ -147,7 +149,7 @@ server.registerEndpoint({path: '/api/test/token', method: HTTPMethods.GET, guard
 */
 
 // This one should error out, because it is overlapping with default endpoint
-//server.registerEndpoint({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.DELETE, guards: [guardOverride], controller: (req, res) => { res.send('User deleted (not actually)'); }});
+server.registerEndpointV2({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.DELETE, guards: [guardOverride], controller: (req, res) => { res.send('User deleted (not actually)'); }});
 
 
 // start the server, which includes initializing justin and database connection
