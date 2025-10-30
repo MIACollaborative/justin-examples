@@ -55,12 +55,12 @@ const myLogger: Logger = {
 // v2: use Endpoint solely as interface
 
 // register a new endpoint
-server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+//server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
 // do it twice will throw an error
 // server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
 
 // override a default endpoint
-// server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
+//server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
 
 // override a non-existing endpoint -> throw an error
 // server.overrideDefaultEndpointV2({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
@@ -68,7 +68,7 @@ server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, gua
 // override a custom endpoint (non-default)
 // server.overrideDefaultEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardOverride]});
 
-/*
+
 const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPMethods.GET) as Endpoint;
 Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
 // get default guards
@@ -87,7 +87,7 @@ console.log("Controller:", controller.toString());
 const newController: RequestHandler = (req: Request, res: Response) => { res.send('New controller!'); };
 usersGetEndpoint.setController(newController);
 console.log("Controller after setController:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getController().toString());
-*/
+
 
 
 // original methods
@@ -97,11 +97,11 @@ console.log("Controller after setController:", server.getEndpoint('/api/users', 
 
 // try overriding all guards
 // TODO: provide getEndpoints method in server
-/*
+
 server.getEndpoints().forEach((endpoint: Endpoint) => {
   endpoint.setGuards([guardOverride]);
 });
-*/
+
 
 // v1: use Endpoint as interface, still using JEndpointsConfiguration (basePath) and JEndpointConfiguration
 /*
