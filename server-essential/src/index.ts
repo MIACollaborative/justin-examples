@@ -1,4 +1,4 @@
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, EndpointRoute, JGuard } from '@just-in/server';
+import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, JGuard } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -52,7 +52,21 @@ const myLogger: Logger = {
 };
 //server.configureLogger(myLogger);
 
-// v2: use Endpoint solely as interface, no longer using JEndpointsConfiguration (basePath) and JEndpointConfiguration
+// v2: use Endpoint solely as interface
+
+// register a new endpoint
+server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+// do it twice will throw an error
+// server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+
+// override a default endpoint
+// server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
+
+// override a non-existing endpoint -> throw an error
+// server.overrideDefaultEndpointV2({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
+
+// override a custom endpoint (non-default)
+// server.overrideDefaultEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardOverride]});
 
 /*
 const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPMethods.GET) as Endpoint;
@@ -77,8 +91,9 @@ console.log("Controller after setController:", server.getEndpoint('/api/users', 
 
 
 // original methods
-server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
-// server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
+
+
+
 
 // try overriding all guards
 // TODO: provide getEndpoints method in server
@@ -149,7 +164,7 @@ server.registerEndpoint({path: '/api/test/token', method: HTTPMethods.GET, guard
 */
 
 // This one should error out, because it is overlapping with default endpoint
-server.registerEndpointV2({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.DELETE, guards: [guardOverride], controller: (req, res) => { res.send('User deleted (not actually)'); }});
+//server.registerEndpointV2({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.DELETE, guards: [guardOverride], controller: (req, res) => { res.send('User deleted (not actually)'); }});
 
 
 // start the server, which includes initializing justin and database connection
