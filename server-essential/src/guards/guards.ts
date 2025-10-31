@@ -1,6 +1,6 @@
-import { JGuard, Request, Response, NextFunction, Log } from "@just-in/server";
+import { Guard, Request, Response, NextFunction, Log } from "@just-in/server";
 
-const guardThrowError: JGuard = Object.assign(
+const guardThrowError: Guard = Object.assign(
   /**
    * A custom guard based on Express middleware
    * @param req - Express request object
@@ -28,7 +28,7 @@ const guardThrowError: JGuard = Object.assign(
  * A custom guard that allows all requests.
  * This guard simply logs and allows all requests to proceed.
  */
-const guardCustom: JGuard = Object.assign(
+const guardCustom: Guard = Object.assign(
   /**
    * A custom guard based on Express middleware
    * @param req - Express request object
@@ -55,7 +55,7 @@ const guardCustom: JGuard = Object.assign(
  * A custom guard that allows all requests.
  * This guard simply logs and allows all requests to proceed.
  */
-const guardOverride: JGuard = Object.assign(
+const guardOverride: Guard = Object.assign(
   /**
    * A custom guard based on Express middleware
    * @param req - Express request object
@@ -83,7 +83,7 @@ const guardOverride: JGuard = Object.assign(
  * A generic guard that allows all requests.
  * This guard simply logs and allows all requests to proceed.
  */
-const guardGeneric: JGuard = Object.assign(
+const guardGeneric: Guard = Object.assign(
   /**
    * A generic guard based on Express middleware
    * @param req - Express request object
@@ -110,7 +110,7 @@ const guardGeneric: JGuard = Object.assign(
  * A generic permission guard that allows all requests.
  * This guard logs and allows all requests to proceed, simulating permission checks.
  */
-const permissionGuardGeneric: JGuard = Object.assign(
+const permissionGuardGeneric: Guard = Object.assign(
   /**
    * A generic permission guard based on Express middleware.
    * @param req - Express request object
@@ -137,7 +137,7 @@ const permissionGuardGeneric: JGuard = Object.assign(
  * A request validator guard that checks for a valid bearer token.
  * This guard checks for an Authorization header with a valid token.
  */
-const requestTokenValidatorGuard: JGuard = Object.assign(
+const requestTokenValidatorGuard: Guard = Object.assign(
   /**
    * Express middleware for the request token validator guard.
    * @param req - Express request object

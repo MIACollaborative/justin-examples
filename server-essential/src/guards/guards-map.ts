@@ -1,9 +1,9 @@
-import { HTTPMethods, JGuard, DEFAULT_GUARDS } from "@just-in/server";
+import { HTTPMethods, Guard, DEFAULT_GUARDS } from "@just-in/server";
 import { guardCustom } from "./guards";
 
 const usersGuardsMap = new Map<
     string,
-    Map<HTTPMethods, JGuard[]>
+    Map<HTTPMethods, Guard[]>
   >();
 
   usersGuardsMap.set("/api/users", new Map());

@@ -1,4 +1,4 @@
-import { JAppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, JAppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, JGuard } from '@just-in/server';
+import { AppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, AppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, Guard } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -6,7 +6,7 @@ import util from 'util';
 
 const justIn = JustIn();
 
-let customConfig: JAppServerConfiguration | undefined  = undefined;
+let customConfig: AppServerConfiguration | undefined  = undefined;
 
 
 customConfig = {
@@ -28,7 +28,7 @@ justIn.setLoggingLevels({
 });
 
 // option 1: let the server create its own JustIn instance
-const server = JAppServer(customConfig);
+const server = AppServer(customConfig);
 const port = process.env.PORT || 3001;
 
 
@@ -73,11 +73,11 @@ const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPM
 Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
 // get default guards
 const guards = usersGetEndpoint.getGuards();
-console.log("Guards:", guards.map((guard: JGuard) => guard.getName()));
+console.log("Guards:", guards.map((guard: Guard) => guard.getName()));
 
 // override guards
 usersGetEndpoint.setGuards([guardOverride]);
-console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: JGuard) => guard.getName()));
+console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: Guard) => guard.getName()));
 
 // get default controller
 const controller = usersGetEndpoint.getController();
@@ -98,7 +98,7 @@ console.log("Controller after setController:", server.getEndpoint('/api/users', 
 // try overriding all guards
 // TODO: provide getEndpoints method in server
 
-server.getEndpoints().forEach((endpoint: Endpoint) => {
+server.getAllEndpoints().forEach((endpoint: Endpoint) => {
   endpoint.setGuards([guardOverride]);
 });
 
