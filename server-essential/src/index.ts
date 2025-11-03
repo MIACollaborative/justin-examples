@@ -76,10 +76,11 @@ const guards = usersGetEndpoint.getGuards();
 console.log("Guards:", guards.map((guard: Guard) => guard.getName()));
 
 // override guards
-usersGetEndpoint.setGuards([guardOverride]);
+usersGetEndpoint.setGuards([guardThrowError]);
 console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: Guard) => guard.getName()));
 
 // get default controller
+/*
 const controller = usersGetEndpoint.getController();
 console.log("Controller:", controller.toString());
 
@@ -87,7 +88,7 @@ console.log("Controller:", controller.toString());
 const newController: RequestHandler = (req: Request, res: Response) => { res.send('New controller!'); };
 usersGetEndpoint.setController(newController);
 console.log("Controller after setController:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getController().toString());
-
+*/
 
 
 // original methods
@@ -97,11 +98,11 @@ console.log("Controller after setController:", server.getEndpoint('/api/users', 
 
 // try overriding all guards
 // TODO: provide getEndpoints method in server
-
+/*
 server.getAllEndpoints().forEach((endpoint: Endpoint) => {
   endpoint.setGuards([guardOverride]);
 });
-
+*/
 
 // v1: use Endpoint as interface, still using JEndpointsConfiguration (basePath) and JEndpointConfiguration
 /*
