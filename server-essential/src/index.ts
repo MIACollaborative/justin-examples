@@ -71,6 +71,7 @@ const myLogger: Logger = {
 
 const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPMethods.GET) as Endpoint;
 Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
+/*
 // get default guards
 const guards = usersGetEndpoint.getGuards();
 console.log("Guards:", guards.map((guard: Guard) => guard.getName()));
@@ -78,17 +79,18 @@ console.log("Guards:", guards.map((guard: Guard) => guard.getName()));
 // override guards
 usersGetEndpoint.setGuards([guardThrowError]);
 console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: Guard) => guard.getName()));
+*/
 
 // get default controller
-/*
+
 const controller = usersGetEndpoint.getController();
 console.log("Controller:", controller.toString());
 
 // override controller
-const newController: RequestHandler = (req: Request, res: Response) => { res.send('New controller!'); };
+const newController: RequestHandler = (req: Request, res: Response) => { throw new Error("Controller throwing error"); };
 usersGetEndpoint.setController(newController);
 console.log("Controller after setController:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getController().toString());
-*/
+
 
 
 // original methods
