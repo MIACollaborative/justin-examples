@@ -1,4 +1,4 @@
-import { HTTPMethods, Guard, DEFAULT_GUARDS } from "@just-in/server";
+import { HTTPMethods, Guard } from "@just-in/server";
 import { guardCustom } from "./guards";
 
 const usersGuardsMap = new Map<

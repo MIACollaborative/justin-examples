@@ -1,4 +1,4 @@
-import { AppServer, DEFAULT_GUARDS, HTTPMethods, JustIn, Log, Logger, AppServerConfiguration, EndpointManager, Endpoint, Request, Response, RequestHandler, Guard } from '@just-in/server';
+import { AppServer, HTTPMethods, JustIn, Log, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -72,7 +72,7 @@ const myLogger: Logger = {
 const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPMethods.GET) as Endpoint;
 Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
 
-/*
+
 // get default guards
 const guards = usersGetEndpoint.getGuards();
 console.log("Guards:", guards.map((guard: Guard) => guard.getName()));
@@ -80,11 +80,11 @@ console.log("Guards:", guards.map((guard: Guard) => guard.getName()));
 // override guards
 usersGetEndpoint.setGuards([guardThrowError]);
 console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: Guard) => guard.getName()));
-*/
+
 
 // get default controller
 
-/*
+
 const controller = usersGetEndpoint.getController();
 console.log("Controller:", controller.toString());
 
@@ -92,11 +92,25 @@ console.log("Controller:", controller.toString());
 const newController: RequestHandler = (req: Request, res: Response) => { throw new Error("Controller throwing error"); };
 usersGetEndpoint.setController(newController);
 console.log("Controller after setController:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getController().toString());
+
+
+/*
+// try override a non-existing endpoint
+server.overrideDefaultEndpoint({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
+
+// try register an existing endpoint
+server.registerEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+
+
+// add a new endpoint
+const newEndpointConfig = {path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardGeneric], controller: (req: Request, res: Response) => { res.send('Hello!'); }};
+
+const newEndpoint:Endpoint = server.registerEndpoint(newEndpointConfig) as Endpoint;
+console.log("New endpoint added:", util.inspect(newEndpoint));
+
+server.registerEndpoint(newEndpointConfig) as Endpoint;
+console.log("New endpoint added:", util.inspect(newEndpoint));
 */
-
-// original methods
-
-
 
 
 // try overriding all guards
@@ -149,11 +163,7 @@ console.log("All endpoint bases:", allEndpointBases);
 // override guards, leave the controller intact
 server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
 
-// add a new guard, and override existing controller
-server.overrideDefaultEndpoint(
-  {path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.DELETE, guards: [...DEFAULT_GUARDS, guardOverride], 
-    controller: (req, res) => { res.send('User deleted (not actually) - overridden'); }}
-);
+
 
 // Issue a warning, as /api/notexist is not handled by default configuration
 server.overrideDefaultEndpoint({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
