@@ -1,28 +1,39 @@
 import { Guard, Request, Response, NextFunction, Log } from "@just-in/server";
 
+
+function createGuard(name: string, configuration: object, guardImpl: (req: Request, res: Response, next: NextFunction) => void): Guard {
+  const guard: Guard = {
+    getName: () => name,
+    getConfiguration: () => configuration,
+    // Add the guard implementation as a method or call it in the constructor
+    handle: guardImpl
+  };
+
+  return result;
+}
+
+const guardThrowError = createGuard('guardThrowError', { description: 'A guard that throws an error.' }, (req: Request, res: Response, next: NextFunction) => {
+  Log.dev('Throw error guard!');
+  throw new Error('Throw error guard!');
+  next();
+});
+
+/*
 const guardThrowError: Guard = Object.assign(
-  /**
-   * A custom guard based on Express middleware
-   * @param req - Express request object
-   * @param res - Express response object
-   * @param next - Express next function
-   */
-  (req: Request, res: Response, next: NextFunction) => {
+
+   function guardThrowError(req: Request, res: Response, next: NextFunction) {
     Log.dev('Throw error guard!');
     throw new Error('Throw error guard!');
     next();
   },
   {
-    /**
-     * Returns the name of the guard.
-     */
+
     getName: () => 'guardThrowError',
-    /**
-     * Returns the configuration for the guard.
-     */
     getConfiguration: () => ({ description: 'A guard that throws an error.' })
   }
 );
+*/
+
 
 /**
  * A custom guard that allows all requests.
@@ -35,7 +46,7 @@ const guardCustom: Guard = Object.assign(
    * @param res - Express response object
    * @param next - Express next function
    */
-  (req: Request, res: Response, next: NextFunction) => {
+  function guardCustom(req: Request, res: Response, next: NextFunction) {
     Log.dev('Custom guard!');
     next();
   },
@@ -62,7 +73,7 @@ const guardOverride: Guard = Object.assign(
    * @param res - Express response object
    * @param next - Express next function
    */
-  (req: Request, res: Response, next: NextFunction) => {
+  function guardOverride(req: Request, res: Response, next: NextFunction) {
     Log.dev('Override guard!');
     next();
   },
@@ -90,7 +101,7 @@ const guardGeneric: Guard = Object.assign(
    * @param res - Express response object
    * @param next - Express next function
    */
-  (req: Request, res: Response, next: NextFunction) => {
+  function guardGeneric(req: Request, res: Response, next: NextFunction) {
     Log.dev('Generic guard!');
     next();
   },
@@ -117,7 +128,7 @@ const permissionGuardGeneric: Guard = Object.assign(
    * @param res - Express response object
    * @param next - Express next function
    */
-  (req: Request, res: Response, next: NextFunction) => {
+  function permissionGuardGeneric(req: Request, res: Response, next: NextFunction) {
     Log.dev('Generic permission guard: all pass');
     next();
   },
@@ -144,7 +155,7 @@ const requestTokenValidatorGuard: Guard = Object.assign(
    * @param res - Express response object
    * @param next - Express next function
    */
-  (req: Request, res: Response, next: NextFunction) => {
+  function requestTokenValidatorGuard(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers['authorization'];
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.slice(7);
