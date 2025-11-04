@@ -1,22 +1,42 @@
-import { Guard, Request, Response, NextFunction, Log } from "@just-in/server";
+import { Guard, Request, Response, NextFunction, Log, RequestHandler } from "@just-in/server";
+
+function createGuard(
+  name: string,
+  configuration: object,
+  handler: (req: Request, res: Response, next: NextFunction) => any | Promise<any>
+): Guard {
+  const fn= ((req: Request, res: Response, next: NextFunction) => {
+      const result = handler(req, res, next);
+      /*
+      // If handler returned a promise, forward rejections to next
+      if (result && typeof (result as Promise<any>).then === "function") {
+        Promise.resolve(result).catch(next);
+      }
 
 
-function createGuard(name: string, configuration: object, guardImpl: (req: Request, res: Response, next: NextFunction) => void): Guard {
-  const guard: Guard = {
-    getName: () => name,
-    getConfiguration: () => configuration,
-    // Add the guard implementation as a method or call it in the constructor
-    handle: guardImpl
-  };
+    try {
 
-  return result;
+      // if sync and no exception, handler should call next() itself when appropriate
+    } catch (err) {
+      next(err);
+    }
+      */
+  }) as RequestHandler & Partial<Guard>;
+
+  // attach metadata methods
+  fn.getName = () => name;
+  fn.getConfiguration = () => configuration;
+
+  return fn as Guard;
 }
+
 
 const guardThrowError = createGuard('guardThrowError', { description: 'A guard that throws an error.' }, (req: Request, res: Response, next: NextFunction) => {
   Log.dev('Throw error guard!');
   throw new Error('Throw error guard!');
   next();
 });
+
 
 /*
 const guardThrowError: Guard = Object.assign(
@@ -155,7 +175,7 @@ const requestTokenValidatorGuard: Guard = Object.assign(
    * @param res - Express response object
    * @param next - Express next function
    */
-  function requestTokenValidatorGuard(req: Request, res: Response, next: NextFunction) {
+  (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.slice(7);
