@@ -1,4 +1,4 @@
-import { Guard, Request, Response, NextFunction, Log, RequestHandler } from "@just-in/server";
+import { Guard, AppServerError, Request, Response, NextFunction, Log, RequestHandler } from "@just-in/server";
 
 function createGuard(
   name: string,
@@ -15,8 +15,12 @@ function createGuard(
 
 
 const guardThrowError = createGuard('guardThrowError', (req: Request, res: Response, next: NextFunction) => {
-  Log.dev('Throw error guard!');
-  throw new Error('Throw error guard!');
+  const msg = 'Throw error guard!';
+  //Log.dev(msg);
+  throw msg;
+  // throw new Error(msg);
+  //throw new AppServerError(msg);
+
   next();
 });
 
