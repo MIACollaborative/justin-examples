@@ -55,20 +55,25 @@ const myLogger: Logger = {
 // v2: use Endpoint solely as interface
 
 // register a new endpoint
-//server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+//server.registerEndpoint({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
 // do it twice will throw an error
-// server.registerEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
+//server.registerEndpoint({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardThrowError], controller: (req, res) => { res.send('Hello!'); }});
 
 // override a default endpoint
-//server.overrideDefaultEndpointV2({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
+//server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [guardOverride]});
 
 // override a non-existing endpoint -> throw an error
-// server.overrideDefaultEndpointV2({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
+//server.overrideDefaultEndpoint({path: '/api/notexist', method: HTTPMethods.GET, guards: []});
 
 // override a custom endpoint (non-default)
 // server.overrideDefaultEndpointV2({path: '/api/test/hello', method: HTTPMethods.GET, guards: [guardOverride]});
 
 
+// get an endpoint that does not exist -> error
+const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/notexist', HTTPMethods.GET) as Endpoint;
+
+
+/*
 const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPMethods.GET) as Endpoint;
 Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
 
@@ -81,7 +86,7 @@ console.log("Guards:", guards.map((guard: Guard) => guard.name));
 // override guards
 usersGetEndpoint.setGuards([guardThrowError]);
 console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: Guard) => guard.name));
-
+*/
 
 // get default controller
 
