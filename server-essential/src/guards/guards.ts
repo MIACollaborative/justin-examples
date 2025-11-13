@@ -16,9 +16,16 @@ function createGuard(
 
 const guardThrowError = createGuard('guardThrowError', (req: Request, res: Response, next: NextFunction) => {
   const msg = 'Throw error guard!';
-  //Log.dev(msg);
+
+  // Log.dev(msg);
+
+  // you can throw anything in Javascript, although not recommended
   // throw msg;
+
+  // throw regular error in typical case
   throw new Error(msg);
+
+  // throw AppServerError if devs want complete control over the error response
   //throw new AppServerError(msg);
 
   next();
