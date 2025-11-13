@@ -18,8 +18,8 @@ const guardThrowError = createGuard('guardThrowError', (req: Request, res: Respo
   const msg = 'Throw error guard!';
   //Log.dev(msg);
   // throw msg;
-  // throw new Error(msg);
-  throw new AppServerError(msg);
+  throw new Error(msg);
+  //throw new AppServerError(msg);
 
   next();
 });
