@@ -76,7 +76,7 @@ const myLogger: Logger = {
 // const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/notexist', HTTPMethods.GET) as Endpoint;
 
 
-
+/*
 const usersGetEndpoint: Endpoint | null = server.getEndpoint('/api/users', HTTPMethods.GET) as Endpoint;
 Log.info("Users get endpoint:", util.inspect(usersGetEndpoint));
 
@@ -89,7 +89,7 @@ console.log("Guards:", guards.map((guard: Guard) => guard.name));
 // override guards
 usersGetEndpoint.setGuards([guardThrowError]);
 console.log("Guards after setGuards:", server.getEndpoint('/api/users', HTTPMethods.GET)!.getGuards().map((guard: Guard) => guard.name));
-
+*/
 
 // get default controller
 
