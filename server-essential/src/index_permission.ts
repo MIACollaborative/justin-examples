@@ -52,7 +52,7 @@ const myLogger: Logger = {
 };
 
 // TODO: continually refine the prototype (contract)
-
+/*
 // Permission-based access control
 server.defineRolePermission("admin", ["read::users", "write::users", "update::users", "delete::users"]);
 server.assignRolesToUser("user123", ["admin"]);
@@ -65,7 +65,7 @@ server.registerEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [R
 // Endpoint-based access control
 server.defineRoleEndpointAccess("admin", [{ path: '/api/users', method: HTTPMethods.GET }, { path: '/api/users', method: HTTPMethods.POST }]);
 server.registerEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [RoleEndpointGuard()], controller: (req, res) => { res.send('Hello!'); }});
-
+*/
 
 //server.configureLogger(myLogger);
 
