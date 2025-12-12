@@ -1,4 +1,11 @@
-import { Guard, AppServerError, Request, Response, NextFunction, Log, RequestHandler } from "@just-in/server";
+import { Guard, AppServerError, Request, Response, NextFunction, createLogger, RequestHandler } from "@just-in/server";
+
+const Log = createLogger({
+  context: {
+    source: 'guard',
+  },
+});
+
 
 function createGuard(
   name: string,
@@ -54,7 +61,7 @@ const guardThrowError: Guard = Object.assign(
  * This guard simply logs and allows all requests to proceed.
  */
 const guardCustom: Guard = (req: Request, res: Response, next: NextFunction) => {
-  Log.dev('Custom guard!');
+  Log.debug('Custom guard!');
   next();
 }
 
@@ -63,7 +70,7 @@ const guardCustom: Guard = (req: Request, res: Response, next: NextFunction) => 
  * This guard simply logs and allows all requests to proceed.
  */
 const guardOverride: Guard = (req: Request, res: Response, next: NextFunction) => {
-  Log.dev('Override guard!');
+  Log.debug('Override guard!');
   next();
 };
 
@@ -73,7 +80,7 @@ const guardOverride: Guard = (req: Request, res: Response, next: NextFunction) =
  * This guard simply logs and allows all requests to proceed.
  */
 const guardGeneric: Guard = (req: Request, res: Response, next: NextFunction) => {
-  Log.dev('Generic guard!');
+  Log.debug('Generic guard!');
   next();
 };
 
@@ -87,12 +94,12 @@ const requestTokenValidatorGuard: Guard = (req: Request, res: Response, next: Ne
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.slice(7);
     if (token === 'valid-token') {
-      Log.dev(`${requestTokenValidatorGuard.name}: Request Validator Guard: valid token`);
+      Log.debug(`${requestTokenValidatorGuard.name}: Request Validator Guard: valid token`);
       next();
       return;
     }
   }
-  Log.dev(`${requestTokenValidatorGuard.name}: Request Validator Guard: invalid or missing token`);
+  Log.debug(`${requestTokenValidatorGuard.name}: Request Validator Guard: invalid or missing token`);
   res.status(401).json({ error: 'Unauthorized' });
 };
 

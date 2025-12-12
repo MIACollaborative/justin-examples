@@ -1,31 +1,20 @@
-import { AppServer, HTTPMethods, JustIn, Log, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller } from '@just-in/server';
+import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
-// option 2: pass in your own JustIn instance
 
-const justIn = JustIn();
+const Log = createLogger({
+  context: {
+    source: 'my-app-server',
+  },
+});
 
 let customConfig: AppServerConfiguration | undefined  = undefined;
 
 
 customConfig = {
-  //endpointGuardsMap: usersGuardsMap,
-
-  // TODO: we will decide whether to do it this way and if it is needed.
-  // I will setup a method for people to setLoggingLevels through the server instance.
-  justIn: justIn
+  enableTransactionLogging: true,
 };
-
-
-
-// set your logging levels here, before passing into server
-justIn.setLoggingLevels({
-  dev: true,
-  info: true,
-  warn: true,
-  error: true
-});
 
 // option 1: let the server create its own JustIn instance
 const server = AppServer(customConfig);
@@ -35,7 +24,7 @@ const port = process.env.PORT || 3001;
 
 
 // optionally, assign your own logger
-// otherwise it will use the default console logger (Log) from just-in core
+/*
 const myLogger: Logger = {
   info: (message?: any, ...optionalParams: any[]) => {
     console.log(`[Example] ${message}`, ...optionalParams);
@@ -46,10 +35,12 @@ const myLogger: Logger = {
   error: (message?: any, ...optionalParams: any[]) => {
     console.error(`[Example] ${message}`, ...optionalParams);
   },
-  dev: (message?: any, ...optionalParams: any[]) => {
+  debug: (message?: any, ...optionalParams: any[]) => {
     console.debug(`[Example] ${message}`, ...optionalParams);
   },
 };
+*/
+
 //server.configureLogger(myLogger);
 
 // v2: use Endpoint solely as interface
