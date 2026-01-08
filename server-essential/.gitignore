@@ -1,0 +1,5 @@
+# auth
+*.pem
+*.cert
+*.key
+*.pub
