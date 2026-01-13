@@ -1,4 +1,4 @@
-import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger } from '@just-in/server';
+import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, AuthenticationGuard } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -21,6 +21,11 @@ const server = AppServer(customConfig);
 const port = process.env.PORT || 3001;
 
 
+ server.registerEndpoint(
+  {
+    path: '/api/test/auth', method: HTTPMethods.GET, guards: [AuthenticationGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, You are authenticated!`); }
+  }
+);
 
 
 // optionally, assign your own logger
