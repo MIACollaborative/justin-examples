@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "module": "commonjs",
+    "module": "ESNext", // Change from "commonjs" to "ESNext"
+    "moduleResolution": "node", // Add this for proper module resolution
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,

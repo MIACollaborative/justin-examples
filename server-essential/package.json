@@ -5,6 +5,7 @@
   "author": "MIA Collaborative",
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
+  "type": "module",
   "engines": {
     "node": ">=20"
   },

@@ -1,4 +1,4 @@
-import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, AuthenticationGuard, getRoleEndpointGuard, RoleEndpointGuard } from '@just-in/server';
+import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, AuthenticationGuard, getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -19,6 +19,9 @@ customConfig = {
 // option 1: let the server create its own JustIn instance
 const server = AppServer(customConfig);
 const port = process.env.PORT || 3001;
+
+// TODO: revisit to see if this step can be inlcuded in a server method
+await UserManager.init();
 
 
 const roleEndpointGuard: RoleEndpointGuard = getRoleEndpointGuard();
