@@ -1,4 +1,4 @@
-import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, AuthenticationGuard } from '@just-in/server';
+import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, AuthenticationGuard, getRoleEndpointGuard, RoleEndpointGuard } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -9,7 +9,7 @@ const Log = createLogger({
   },
 });
 
-let customConfig: AppServerConfiguration | undefined  = undefined;
+let customConfig: AppServerConfiguration | undefined = undefined;
 
 
 customConfig = {
@@ -21,11 +21,53 @@ const server = AppServer(customConfig);
 const port = process.env.PORT || 3001;
 
 
- server.registerEndpoint(
+const roleEndpointGuard: RoleEndpointGuard = getRoleEndpointGuard();
+
+// this doesn't have to be in the database,
+// but we could imagine that other extensions or modules might want to 
+// access the database even prior to the server starting.
+roleEndpointGuard.defineRoleEndpointAccess("admin", [{
+  path: '/api/users',
+  methodConfig: {
+    allow: ["*"],
+    deny: []
+  }
+}, {
+  path: '/api/protected',
+  methodConfig: {
+    allow: ["*"],
+    deny: [HTTPMethods.DELETE]
+  }
+}]);
+
+roleEndpointGuard.defineRoleEndpointAccess("participant", [{
+  path: '/api/users',
+  methodConfig: {
+    allow: [],
+    deny: ["*"]
+  }
+}, {
+  path: '/api/protected',
+  methodConfig: {
+    allow: [],
+    deny: ["*"]
+  }
+}]);
+
+// Ah... user manager is not intitiated, yet.
+roleEndpointGuard.assignRoleToUsers("admin", ["P1"]);
+roleEndpointGuard.assignRoleToUsers("participant", ["P1, P2"]);
+
+
+server.registerEndpoint(
   {
-    path: '/api/test/auth', method: HTTPMethods.GET, guards: [AuthenticationGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, You are authenticated!`); }
+    path: '/api/test/auth', method: HTTPMethods.GET, guards: [AuthenticationGuard, roleEndpointGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, You are authenticated!`); }
   }
 );
+
+
+
+
 
 
 // optionally, assign your own logger
@@ -120,10 +162,10 @@ server.getAllEndpoints().forEach((endpoint: Endpoint) => {
 
 // start the server, which includes initializing justin and database connection
 server.start(port)
-.then(() => {
-  Log.info(`Server started`);
-})
-.catch((err: Error) => {
-  Log.error("Error starting server:", err);
-});
+  .then(() => {
+    Log.info(`Server started`);
+  })
+  .catch((err: Error) => {
+    Log.error("Error starting server:", err);
+  });
 
