@@ -29,6 +29,8 @@ const roleEndpointGuard: RoleEndpointGuard = getRoleEndpointGuard();
 // this doesn't have to be in the database,
 // but we could imagine that other extensions or modules might want to 
 // access the database even prior to the server starting.
+
+
 roleEndpointGuard.defineRoleEndpointAccess("admin", [{
   path: '/api/users',
   methodConfig: {
@@ -42,6 +44,7 @@ roleEndpointGuard.defineRoleEndpointAccess("admin", [{
     deny: [HTTPMethods.DELETE]
   }
 }]);
+
 
 roleEndpointGuard.defineRoleEndpointAccess("participant", [{
   path: '/api/users',
@@ -57,17 +60,19 @@ roleEndpointGuard.defineRoleEndpointAccess("participant", [{
   }
 }]);
 
+
 // Ah... user manager is not intitiated, yet.
 roleEndpointGuard.assignRoleToUsers("admin", ["P1"]);
-roleEndpointGuard.assignRoleToUsers("participant", ["P1, P2"]);
 
+roleEndpointGuard.assignRoleToUsers("participant", ["P1", "P2"]);
 
+/*
 server.registerEndpoint(
   {
     path: '/api/test/auth', method: HTTPMethods.GET, guards: [AuthenticationGuard, roleEndpointGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, You are authenticated!`); }
   }
 );
-
+*/
 
 
 
