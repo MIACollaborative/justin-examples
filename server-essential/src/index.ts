@@ -1,4 +1,4 @@
-import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, AuthenticationGuard, getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
+import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, getAuthenticationGuard, SelfGuard, getSelfGuard, getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -23,15 +23,28 @@ const port = process.env.PORT || 3001;
 // TODO: revisit to see if this step can be inlcuded in a server method
 await UserManager.init();
 
+const authGuard: Guard = getAuthenticationGuard();
 
 const roleEndpointGuard: RoleEndpointGuard = getRoleEndpointGuard();
 
-// this doesn't have to be in the database,
+const selfGuard: SelfGuard = getSelfGuard();
+selfGuard.setIdentifierName("userUniqueIdentifier");
+
+// Note: this doesn't have to be in the database,
 // but we could imagine that other extensions or modules might want to 
 // access the database even prior to the server starting.
 
 
-roleEndpointGuard.defineRoleEndpointAccess("admin", [{
+roleEndpointGuard.defineRoleEndpointAccess("admin", [
+  {
+  path: '/api/test',
+  methodConfig: {
+    allow: ["*"],
+    deny: []
+  }
+},  
+  
+  {
   path: '/api/users',
   methodConfig: {
     allow: ["*"],
@@ -46,7 +59,15 @@ roleEndpointGuard.defineRoleEndpointAccess("admin", [{
 }]);
 
 
-roleEndpointGuard.defineRoleEndpointAccess("participant", [{
+roleEndpointGuard.defineRoleEndpointAccess("participant", [
+  {
+  path: '/api/test',
+  methodConfig: {
+    allow: [],
+    deny: ["*"]
+  }
+},   
+  {
   path: '/api/users',
   methodConfig: {
     allow: [],
@@ -66,13 +87,31 @@ roleEndpointGuard.assignRoleToUsers("admin", ["P1"]);
 
 roleEndpointGuard.assignRoleToUsers("participant", ["P1", "P2"]);
 
-/*
+
 server.registerEndpoint(
   {
-    path: '/api/test/auth', method: HTTPMethods.GET, guards: [AuthenticationGuard, roleEndpointGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, You are authenticated!`); }
+    path: '/api/test/auth', method: HTTPMethods.GET, guards: [authGuard, roleEndpointGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, You are authenticated!`); }
   }
 );
-*/
+
+server.registerEndpoint(
+  {
+    path: '/api/self/:userUniqueIdentifier', method: HTTPMethods.GET, guards: [authGuard, selfGuard], controller: (req: Request, res: Response) => { res.send(`Hello ${req["userId"]}, you are allow to access the self endpoint for ${req.params["userUniqueIdentifier"]} !`); }
+  }
+);
+
+server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [authGuard, roleEndpointGuard]});
+server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.POST, guards: [authGuard, roleEndpointGuard]});
+
+server.overrideDefaultEndpoint({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.GET, guards: [authGuard, roleEndpointGuard]});
+server.overrideDefaultEndpoint({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.PATCH, guards: [authGuard, roleEndpointGuard]});
+server.overrideDefaultEndpoint({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.DELETE, guards: [authGuard, roleEndpointGuard]});
+
+
+server.overrideDefaultEndpoint({path: '/api/protected/:userUniqueIdentifier/:namespace', method: HTTPMethods.GET, guards: [authGuard, roleEndpointGuard]});
+server.overrideDefaultEndpoint({path: '/api/protected/:userUniqueIdentifier/:namespace', method: HTTPMethods.PATCH, guards: [authGuard, roleEndpointGuard]});
+server.overrideDefaultEndpoint({path: '/api/protected/:userUniqueIdentifier/:namespace', method: HTTPMethods.DELETE, guards: [authGuard, roleEndpointGuard]});
+
 
 
 
