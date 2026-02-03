@@ -35,7 +35,7 @@ selfGuard.setIdentifierName("userUniqueIdentifier");
 // access the database even prior to the server starting.
 
 
-roleEndpointGuard.defineRoleEndpointAccess("admin", [
+await roleEndpointGuard.defineRoleEndpointAccess("admin", [
   {
   path: '/api/test',
   methodConfig: {
@@ -59,7 +59,7 @@ roleEndpointGuard.defineRoleEndpointAccess("admin", [
 }]);
 
 
-roleEndpointGuard.defineRoleEndpointAccess("participant", [
+await roleEndpointGuard.defineRoleEndpointAccess("participant", [
   {
   path: '/api/test',
   methodConfig: {
@@ -83,9 +83,9 @@ roleEndpointGuard.defineRoleEndpointAccess("participant", [
 
 
 // Ah... user manager is not intitiated, yet.
-roleEndpointGuard.assignRoleToUsers("admin", ["P1"]);
+await roleEndpointGuard.assignRoleToUsers("admin", ["P1"]);
 
-roleEndpointGuard.assignRoleToUsers("participant", ["P1", "P2"]);
+await roleEndpointGuard.assignRoleToUsers("participant", ["P1", "P2"]);
 
 
 server.registerEndpoint(
@@ -101,7 +101,7 @@ server.registerEndpoint(
 );
 
 server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.GET, guards: [authGuard, roleEndpointGuard]});
-server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.POST, guards: [authGuard, roleEndpointGuard]});
+//server.overrideDefaultEndpoint({path: '/api/users', method: HTTPMethods.POST, guards: [authGuard, roleEndpointGuard]});
 
 server.overrideDefaultEndpoint({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.GET, guards: [authGuard, roleEndpointGuard]});
 server.overrideDefaultEndpoint({path: '/api/users/:userUniqueIdentifier', method: HTTPMethods.PATCH, guards: [authGuard, roleEndpointGuard]});
