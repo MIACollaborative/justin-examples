@@ -112,6 +112,9 @@ server.overrideDefaultEndpoint({path: '/api/protected/:userUniqueIdentifier/:nam
 server.overrideDefaultEndpoint({path: '/api/protected/:userUniqueIdentifier/:namespace', method: HTTPMethods.PATCH, guards: [authGuard, roleEndpointGuard]});
 server.overrideDefaultEndpoint({path: '/api/protected/:userUniqueIdentifier/:namespace', method: HTTPMethods.DELETE, guards: [authGuard, roleEndpointGuard]});
 
+// TODO: consider making the guard into the framework
+server.overrideDefaultEndpoint({path: '/api/auth/me', method: HTTPMethods.POST, guards: [authGuard]});
+
 
 
 
