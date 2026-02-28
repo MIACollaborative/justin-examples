@@ -1,4 +1,4 @@
-import { AppServer, HTTPMethods, Logger, AppServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, getAuthenticationGuard, SelfGuard, getSelfGuard, getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
+import { JustInServer, HTTPMethods, Logger, ServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, getAuthenticationGuard, SelfGuard, getSelfGuard, getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 import util from 'util';
 
@@ -9,7 +9,7 @@ const Log = createLogger({
   },
 });
 
-let customConfig: AppServerConfiguration | undefined = undefined;
+let customConfig: ServerConfiguration | undefined = undefined;
 
 
 customConfig = {
@@ -17,7 +17,7 @@ customConfig = {
 };
 
 // option 1: let the server create its own JustIn instance
-const server = AppServer(customConfig);
+const server = JustInServer(customConfig);
 const port = process.env.PORT || 3001;
 
 // TODO: revisit to see if this step can be inlcuded in a server method

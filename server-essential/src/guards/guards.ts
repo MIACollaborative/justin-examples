@@ -1,4 +1,4 @@
-import { Guard, AppServerError, Request, Response, NextFunction, createLogger, RequestHandler } from "@just-in/server";
+import { Guard, ServerError, Request, Response, NextFunction, createLogger, RequestHandler } from "@just-in/server";
 
 const Log = createLogger({
   context: {
