@@ -140,3 +140,6 @@ dist
 
 # MacOS junk
 .DS_Store
+
+# IDE
+.idea
