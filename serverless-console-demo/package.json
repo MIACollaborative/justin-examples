@@ -1,0 +1,23 @@
+{
+  "name": "serverless-console-demo",
+  "version": "1.0.0",
+  "description": "Local demo runner for @just-in/engine — serverless mode.",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "demo": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "yarn build && node dist/index.js"
+  },
+  "dependencies": {
+    "@just-in/core": "0.3.0",
+    "@just-in/engine": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
