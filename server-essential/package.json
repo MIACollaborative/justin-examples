@@ -2,7 +2,7 @@
   "name": "server-essential",
   "version": "1.0.0",
   "description": "",
-  "author": "MIA Collaborative",
+  "author": "JustIn Consotium",
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
   "type": "module",
