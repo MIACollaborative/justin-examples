@@ -30,7 +30,8 @@
   "author": "MIA Collaborative",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@just-in/core": "^0.0.9",
+    "@justin-consortium/core": "^0.3.2",
+    "@justin-consortium/engine": "^0.1.2",
     "@sendgrid/mail": "^8.1.5",
     "dotenv": "^17.2.0",
     "node-mailjet": "^6.0.8",

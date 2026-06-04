@@ -3,6 +3,7 @@
     "target": "es2022",
     "module": "ESNext", // Change from "commonjs" to "ESNext"
     "moduleResolution": "node", // Add this for proper module resolution
+    "types": ["node"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
