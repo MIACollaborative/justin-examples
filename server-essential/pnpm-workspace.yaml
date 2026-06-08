@@ -1,0 +1,2 @@
+allowBuilds:
+  "@just-in/server": true

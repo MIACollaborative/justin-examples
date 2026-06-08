@@ -19,7 +19,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@just-in/server": "git+ssh://git@github.com/justin-consortium/justin-server.git#jst-111-server-auth-multi-device",
+    "@just-in/server": "git+ssh://git@github.com/justin-consortium/justin-server.git#jst-111-2-add-tests",
     "@justin-consortium/core": "^0.3.2"
   },
   "peerDependencies": {
