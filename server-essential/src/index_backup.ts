@@ -1,4 +1,4 @@
-import { JustInServer, HTTPMethods, Logger, ServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, getAuthenticationGuard, SelfGuard, getSelfGuard, getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
+import { JustInServer, HTTPMethods, Logger, ServerConfiguration, Endpoint, Request, Response, RequestHandler, Guard, Controller, createLogger, getAuthenticationGuard, getSelfGuard,getRoleEndpointGuard, RoleEndpointGuard, UserManager } from '@just-in/server';
 import { usersGuardsMap, guardOverride, guardGeneric, guardThrowError, requestTokenValidatorGuard } from "./guards/index";
 //import * as util from 'util';
 
@@ -27,8 +27,7 @@ const authGuard: Guard = getAuthenticationGuard();
 
 const roleEndpointGuard: RoleEndpointGuard = getRoleEndpointGuard();
 
-const selfGuard: SelfGuard = getSelfGuard();
-selfGuard.setIdentifierName("userUniqueIdentifier");
+const selfGuard: Guard = getSelfGuard("userUniqueIdentifier");
 
 // Note: this doesn't have to be in the database,
 // but we could imagine that other extensions or modules might want to 

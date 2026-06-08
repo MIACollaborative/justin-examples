@@ -1,2 +1,5 @@
 allowBuilds:
   "@just-in/server": true
+  bcrypt: true
+  esbuild: true
+  mongodb-memory-server: true

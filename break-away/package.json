@@ -7,20 +7,21 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "yarn build && node dist/index.js",
+    "start": "pnpm build && node dist/index.js",
     "clean": "rm -rf dist",
     "build": "tsc",
-    "build:core": "cd ../../justin-core && yarn build",
-    "build:all": "yarn build:core && yarn build",
+    "build:core": "cd ../../justin-core && pnpm build",
+    "build:all": "pnpm build:core && pnpm build",
     "test:unit": "jest --config=jest.unit.config.js --coverage --detectOpenHandles",
     "test:integration": "jest --config=jest.integration.config.js --coverage --detectOpenHandles",
     "test:api": "jest --config=jest.api.config.js --coverage",
-    "test": "yarn test:unit && yarn test:integration",
-    "test:email": "yarn build && node dist/test_script/test_email.js",
-    "test:csv": "yarn build && node dist/test_script/test_csv.js",
-    "test:message": "yarn build && node dist/test_script/test_message_bank.js",
-    "test:user": "yarn build && node dist/test_script/test_user_helper.js"
+    "test": "pnpm test:unit && pnpm test:integration",
+    "test:email": "pnpm build && node dist/test_script/test_email.js",
+    "test:csv": "pnpm build && node dist/test_script/test_csv.js",
+    "test:message": "pnpm build && node dist/test_script/test_message_bank.js",
+    "test:user": "pnpm build && node dist/test_script/test_user_helper.js"
   },
+  "packageManager": "pnpm@11.5.1",
   "keywords": [],
   "devDependencies": {
     "@types/node": "^24.0.14",
