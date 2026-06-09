@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as Papa from 'papaparse'; 
+import Papa from 'papaparse';
 import { createLogger } from '@justin-consortium/core';
 
 const Log = createLogger({ context: { source: "csv-utility" } });

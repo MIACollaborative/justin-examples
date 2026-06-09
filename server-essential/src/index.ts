@@ -39,6 +39,9 @@ configureLogger({
   },
 });
 
+Log.debug("Configuring DB...");
+configureDB({ dbType: DBType.MONGO, uri: process.env.MONGO_URI ?? "mongodb://localhost:27017/server_essential?replicaSet=rs0" });
+
 const config: ServerConfiguration = {
   enableTransactionLogging: true,
   db: {
@@ -49,8 +52,7 @@ const config: ServerConfiguration = {
   },
 };
 
-Log.debug("Configuring DB...");
-configureDB({ dbType: DBType.MONGO, uri: process.env.MONGO_URI as string });
+
 
 await UserManager.init();
 
@@ -58,8 +60,11 @@ await UserManager.init();
 // TODO: revisit 
 Log.debug("Loading users from CSV...");
 const usersToAdd = await UserHelper.loadUsers();
-Log.debug(`Loaded ${usersToAdd.length} users from CSV. Creating users...`);
-await UserManager.createUsers(usersToAdd);
+const newUsers = usersToAdd.filter(
+  (u) => UserManager.getUserByUniqueIdentifier(u.uniqueIdentifier) === null
+);
+Log.debug(`Loaded ${usersToAdd.length} users from CSV. Creating ${newUsers.length} new users...`);
+if (newUsers.length > 0) await UserManager.createUsers(newUsers);
 Log.debug("Users created.");
 
 const server = JustInServer(config);
