@@ -1,0 +1,22 @@
+meta {
+  name: update a user
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/api/users/P3
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "timezone": "America/New_York"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

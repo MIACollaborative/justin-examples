@@ -1,0 +1,5 @@
+study_id,preferred_name,email,timezone,role,group_id,am_window_start,pm_window_start
+P1,Pei-Yao,adapts-hct-recipients@umich.edu,America/Detroit,person,1,07:00 AM,07:00 PM
+P2,Pei-Yao Mom,adapts-hct-recipients@umich.edu,America/Detroit,care-partner,1,06:00 AM,06:00 PM
+P3,Ziping,adapts-hct-recipients@umich.edu,America/Los_Angeles,person,2,07:00 AM,07:00 PM
+P4,Ziping's Dad,adapts-hct-recipients@umich.edu,America/Los_Angeles,care-partner,2,06:00 AM,06:00 PM
