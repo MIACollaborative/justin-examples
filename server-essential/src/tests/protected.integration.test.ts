@@ -6,11 +6,11 @@ import { makeAccessToken } from "./helpers/auth.js";
 const TEST_USER = { uniqueIdentifier: "PROT1", attributes: { name: "Protected User" } };
 const NAMESPACE = "health";
 
-// NOTE: The protected service in @just-in/server passes `userUniqueIdentifier` (from the URL)
-// to UserManager.setProtectedAttributesForUser / getProtectedAttributesForUser, but those
-// methods expect the internal MongoDB `id` (not the uniqueIdentifier). This is a bug in the
-// upstream package. Functionality tests (200/204) are marked with test.skip until the upstream
-// is fixed; auth-guard tests (401) are unaffected and run normally.
+// The protected service in @just-in/server now correctly passes `userUniqueIdentifier` from the
+// URL to UserManager. However, UserManager._resolveUniqueIdentifier() in @justin-consortium/core
+// v0.3.2 still resolves via getUserByIdFromCache() (MongoDB id) instead of
+// getUserByUniqueIdentifierFromCache(). Functionality tests (200/204) are skipped until that
+// core bug is fixed; auth-guard tests (401) are unaffected.
 
 describe("Protected endpoints", () => {
   let baseUrl: string;

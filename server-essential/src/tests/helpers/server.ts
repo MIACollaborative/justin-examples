@@ -1,7 +1,7 @@
 import { createRequire } from "module";
 import { resolve } from "path";
 import { JustInServer } from "@just-in/server";
-import { DBType, UserManager } from "@justin-consortium/core";
+import { configureDB, DBType, UserManager } from "@justin-consortium/core";
 
 const require = createRequire(import.meta.url);
 // Use an absolute path to bypass the @just-in/server exports map restriction
@@ -17,9 +17,8 @@ export async function startTestServer(): Promise<{
   baseUrl: string;
   server: ServerInstance;
 }> {
-  const server = JustInServer({
-    db: { dbType: DBType.MONGO, uri: process.env.MONGO_URI! },
-  });
+  configureDB({ dbType: DBType.MONGO, uri: process.env.MONGO_URI! });
+  const server = JustInServer({});
   await server.start(0);
   const baseUrl = `http://localhost:${server.port()}`;
   return { baseUrl, server };

@@ -44,12 +44,6 @@ configureDB({ dbType: DBType.MONGO, dbName: "server_essential", uri: process.env
 
 const config: ServerConfiguration = {
   enableTransactionLogging: true,
-  db: {
-    dbType: DBType.MONGO,
-    uri:
-      process.env.MONGO_URI ??
-      "mongodb://localhost:27017/server_essential?replicaSet=rs0",
-  },
 };
 
 

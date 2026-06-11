@@ -23,7 +23,7 @@
   },
   "packageManager": "pnpm@11.5.1",
   "dependencies": {
-    "@just-in/server": "git+ssh://git@github.com/justin-consortium/justin-server.git#jst-111-2-add-tests",
+    "@just-in/server": "github:justin-consortium/justin-server#jst-111-2-add-tests",
     "@justin-consortium/core": "^0.3.2",
     "papaparse": "^5.5.3"
   },
