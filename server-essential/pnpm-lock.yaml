@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@just-in/server':
         specifier: github:justin-consortium/justin-server#jst-111-2-add-tests
-        version: git+https://git@github.com:justin-consortium/justin-server.git#d0be415c792850e976031757e3d1d28da2722078(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))
+        version: git+https://git@github.com:justin-consortium/justin-server.git#b8f145a8e58ce8512f220b9363070af7f4c69e1c(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))
       '@justin-consortium/core':
         specifier: ^0.3.2
         version: 0.3.2(sinon@19.0.5)(vitest@4.1.8)
@@ -262,8 +262,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#d0be415c792850e976031757e3d1d28da2722078':
-    resolution: {commit: d0be415c792850e976031757e3d1d28da2722078, repo: git@github.com:justin-consortium/justin-server.git, type: git}
+  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#b8f145a8e58ce8512f220b9363070af7f4c69e1c':
+    resolution: {commit: b8f145a8e58ce8512f220b9363070af7f4c69e1c, repo: git@github.com:justin-consortium/justin-server.git, type: git}
     version: 0.0.1
     peerDependencies:
       '@justin-consortium/core': '*'
@@ -2073,7 +2073,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#d0be415c792850e976031757e3d1d28da2722078(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))':
+  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#b8f145a8e58ce8512f220b9363070af7f4c69e1c(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))':
     dependencies:
       '@justin-consortium/core': 0.3.2(sinon@19.0.5)(vitest@4.1.8)
       bcrypt: 6.0.0
