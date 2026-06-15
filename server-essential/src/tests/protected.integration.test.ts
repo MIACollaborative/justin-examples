@@ -6,11 +6,6 @@ import { makeAccessToken } from "./helpers/auth.js";
 const TEST_USER = { uniqueIdentifier: "PROT1", attributes: { name: "Protected User" } };
 const NAMESPACE = "health";
 
-// The protected service in @just-in/server now correctly passes `userUniqueIdentifier` from the
-// URL to UserManager. However, UserManager._resolveUniqueIdentifier() in @justin-consortium/core
-// v0.3.2 still resolves via getUserByIdFromCache() (MongoDB id) instead of
-// getUserByUniqueIdentifierFromCache(). Functionality tests (200/204) are skipped until that
-// core bug is fixed; auth-guard tests (401) are unaffected.
 
 describe("Protected endpoints", () => {
   let baseUrl: string;
@@ -29,7 +24,7 @@ describe("Protected endpoints", () => {
 
   // PATCH /api/protected/:uid/:ns
   describe("PATCH /api/protected/:userUniqueIdentifier/:namespace", () => {
-    it.skip("sets protected attributes and returns them", async () => {
+    it("sets protected attributes and returns them", async () => {
       const res = await fetch(`${baseUrl}/api/protected/PROT1/${NAMESPACE}`, {
         method: "PATCH",
         headers: {
@@ -56,7 +51,7 @@ describe("Protected endpoints", () => {
 
   // GET /api/protected/:uid/:ns
   describe("GET /api/protected/:userUniqueIdentifier/:namespace", () => {
-    it.skip("returns the protected attributes for the given names", async () => {
+    it("returns the protected attributes for the given names", async () => {
       const res = await fetch(
         `${baseUrl}/api/protected/PROT1/${NAMESPACE}?names=weight&names=height`,
         {
@@ -82,7 +77,7 @@ describe("Protected endpoints", () => {
 
   // DELETE /api/protected/:uid/:ns
   describe("DELETE /api/protected/:userUniqueIdentifier/:namespace", () => {
-    it.skip("deletes the specified protected attributes and returns 204", async () => {
+    it("deletes the specified protected attributes and returns 204", async () => {
       const res = await fetch(`${baseUrl}/api/protected/PROT1/${NAMESPACE}`, {
         method: "DELETE",
         headers: {
