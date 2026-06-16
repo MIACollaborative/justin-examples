@@ -11,7 +11,7 @@
   },
   "scripts": {
     "type-check": "tsc --watch --noEmit -p tsconfig.json",
-    "dev-run": "nodemon --exec tsx src/index.ts",
+    "dev-run": "nodemon --exec \"node --env-file=.env --import tsx/esm src/index.ts\"",
     "dev": "npm-run-all --parallel type-check dev-run",
     "dev-old": "pnpm build && node --env-file=.env -r source-map-support/register dist/index.js",
     "clean": "rm -rf dist",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@just-in/server": "github:justin-consortium/justin-server#jst-111-2-add-tests",
     "@justin-consortium/core": "^0.3.2",
+    "better-auth": "^1.6.18",
     "papaparse": "^5.5.3"
   },
   "peerDependencies": {

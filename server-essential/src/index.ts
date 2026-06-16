@@ -1,6 +1,7 @@
 import {
   JustInServer,
   ServerConfiguration,
+  createBetterAuthAdapter,
 } from "@just-in/server";
 import {
   configureDB,
@@ -9,7 +10,9 @@ import {
   DBType,
   UserManager,
 } from "@justin-consortium/core";
-import { UserHelper } from "./lib/user-helper";
+import { UserHelper } from "./lib/user-helper.js";
+import { auth } from "./auth.js";
+import { MONGO_URI, DB_NAME } from "./config.js";
 
 const Log = createLogger({
   context: {
@@ -28,10 +31,13 @@ configureLogger({
 });
 
 Log.debug("Configuring DB...");
-configureDB({ dbType: DBType.MONGO, dbName: "server_essential", uri: process.env.MONGO_URI ?? "mongodb://localhost:27017/server_essential?replicaSet=rs0" });
+configureDB({ dbType: DBType.MONGO, dbName: DB_NAME, uri: MONGO_URI });
+
+const authAdapter = createBetterAuthAdapter(auth);
 
 const config: ServerConfiguration = {
   enableTransactionLogging: true,
+  auth: authAdapter,
 };
 
 
