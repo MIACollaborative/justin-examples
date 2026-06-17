@@ -9,9 +9,11 @@ import {
   createLogger,
   DBType,
   UserManager,
+  DataManager,
 } from "@justin-consortium/core";
 import { UserHelper } from "./lib/user-helper.js";
 import { BetterAuthUserHelper } from "./lib/better-auth-user-helper.js";
+import { DBHelper } from "./lib/db-helper.js";
 import { auth, identityCache } from "./auth.js";
 import { MONGO_URI, DB_NAME } from "./config.js";
 
@@ -33,6 +35,8 @@ configureLogger({
 
 Log.debug("Configuring DB...");
 configureDB({ dbType: DBType.MONGO, dbName: DB_NAME, uri: MONGO_URI });
+await DataManager.getInstance().init();
+await DBHelper.dropCollections();
 
 const authAdapter = createBetterAuthAdapter(auth, {
   resolveUserId: identityCache.wrap(async ({ id: betterAuthId }) => {

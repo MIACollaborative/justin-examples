@@ -33,13 +33,6 @@ const wrappedConfig = wrapBetterAuthConfig(baseConfig, {
   resolveJUserKey: (betterAuthUser) => {
     const email = betterAuthUser.email as string | undefined;
     return email ?? null;
-    /*
-    if (!email) return null;
-    const jUser = UserManager.getAllUsers().find(
-      (u) => (u as JUser).uniqueIdentifier === email
-    );
-    return jUser?.uniqueIdentifier ?? null;
-    */
   },
   cache: identityCache,
 });
