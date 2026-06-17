@@ -2,6 +2,7 @@ import {
   JustInServer,
   ServerConfiguration,
   createBetterAuthAdapter,
+  createIdentityCache,
 } from "@just-in/server";
 import {
   configureDB,
@@ -49,12 +50,14 @@ const authAdapter = createBetterAuthAdapter(auth, {
       }
     }
     return null;
-  }),
+  })
 });
+
+
 
 const config: ServerConfiguration = {
   enableTransactionLogging: true,
-  auth: authAdapter,
+  auth: authAdapter
 };
 
 
@@ -78,6 +81,26 @@ Log.debug("better-auth users seeded.");
 
 const server = JustInServer(config);
 const port = process.env.PORT || 3001;
+
+
+// getAuthorizationGuard() returns the same guard instance that was injected
+// on all domain endpoints during server construction.
+const authz = server.getAuthorizationGuard() as RoleEndpointGuard;
+
+await authz.defineRoleEndpointAccess("staff", [
+  { path: "/api/users",     methodConfig: { allow: ["*"], deny: [] } },
+  { path: "/api/users/:id", methodConfig: { allow: ["*"], deny: [] } },
+]);
+
+await authz.defineRoleEndpointAccess("participant", [
+  { path: "/api/self", methodConfig: { allow: ["*"], deny: [] } },
+]);
+
+const allUserIdentifiers = UserManager.getAllUsers().map((u) => u.uniqueIdentifier);
+const participantOnlyIdentifiers = allUserIdentifiers.filter((id) => id !== "pt1@example.com");
+
+await authz.assignRoleToUsers("staff",       ["pt1@example.com"]);
+await authz.assignRoleToUsers("participant", ["pt1@example.com", ...participantOnlyIdentifiers]);
 
 server
   .start(port)
