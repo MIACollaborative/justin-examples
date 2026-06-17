@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@just-in/server':
-        specifier: github:justin-consortium/justin-server#jst-111-2-add-tests
-        version: git+https://git@github.com:justin-consortium/justin-server.git#4f2404656a1083b5f08f067db45cd111f4516d7c(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))(better-auth@1.6.18(mongodb@6.21.0)(vitest@4.1.8))
+        specifier: github:justin-consortium/justin-server#jst-111-4-beter-auth-adapter
+        version: git+https://git@github.com:justin-consortium/justin-server.git#1be8f3313b155ee47af6b0f1e8ffa067c440acc0(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))(better-auth@1.6.18(mongodb@6.21.0)(vitest@4.1.8))
       '@justin-consortium/core':
         specifier: ^0.3.2
         version: 0.3.2(sinon@19.0.5)(vitest@4.1.8)
@@ -344,8 +344,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#4f2404656a1083b5f08f067db45cd111f4516d7c':
-    resolution: {commit: 4f2404656a1083b5f08f067db45cd111f4516d7c, repo: git@github.com:justin-consortium/justin-server.git, type: git}
+  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#1be8f3313b155ee47af6b0f1e8ffa067c440acc0':
+    resolution: {commit: 1be8f3313b155ee47af6b0f1e8ffa067c440acc0, repo: git@github.com:justin-consortium/justin-server.git, type: git}
     version: 0.0.1
     peerDependencies:
       '@justin-consortium/core': '*'
@@ -2317,7 +2317,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#4f2404656a1083b5f08f067db45cd111f4516d7c(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))(better-auth@1.6.18(mongodb@6.21.0)(vitest@4.1.8))':
+  '@just-in/server@git+https://git@github.com:justin-consortium/justin-server.git#1be8f3313b155ee47af6b0f1e8ffa067c440acc0(@justin-consortium/core@0.3.2(sinon@19.0.5)(vitest@4.1.8))(better-auth@1.6.18(mongodb@6.21.0)(vitest@4.1.8))':
     dependencies:
       '@justin-consortium/core': 0.3.2(sinon@19.0.5)(vitest@4.1.8)
       bcrypt: 6.0.0

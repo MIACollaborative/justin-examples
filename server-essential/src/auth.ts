@@ -2,6 +2,8 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { bearer } from "better-auth/plugins/bearer";
 import { MongoClient } from "mongodb";
+import { JUser, UserManager } from "@justin-consortium/core";
+import { createIdentityCache, wrapBetterAuthConfig } from "@just-in/server";
 import { MONGO_URI, DB_NAME } from "./config.js";
 
 const client = new MongoClient(MONGO_URI);
@@ -11,7 +13,9 @@ if (!secret || secret.length < 32) {
   throw new Error("BETTER_AUTH_SECRET must be set to at least 32 characters");
 }
 
-export const auth = betterAuth({
+export const identityCache = createIdentityCache();
+
+const baseConfig = {
   database: mongodbAdapter(client.db(DB_NAME)),
   emailAndPassword: { enabled: true },
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3001",
@@ -22,4 +26,22 @@ export const auth = betterAuth({
     // so the CSRF origin check can stay active for web clients.
     bearer(),
   ],
+  databaseHooks: {},
+};
+
+const wrappedConfig = wrapBetterAuthConfig(baseConfig, {
+  resolveJUserKey: (betterAuthUser) => {
+    const email = betterAuthUser.email as string | undefined;
+    return email ?? null;
+    /*
+    if (!email) return null;
+    const jUser = UserManager.getAllUsers().find(
+      (u) => (u as JUser).uniqueIdentifier === email
+    );
+    return jUser?.uniqueIdentifier ?? null;
+    */
+  },
+  cache: identityCache,
 });
+
+export const auth = betterAuth(wrappedConfig);
