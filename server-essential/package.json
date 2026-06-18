@@ -23,7 +23,7 @@
   },
   "packageManager": "pnpm@11.5.1",
   "dependencies": {
-    "@just-in/server": "github:justin-consortium/justin-server#jst-111-5-role-authorization",
+    "@just-in/server": "github:justin-consortium/justin-server#jst-187-websocket",
     "@justin-consortium/core": "^0.3.2",
     "better-auth": "^1.6.18",
     "papaparse": "^5.5.3"
