@@ -2,7 +2,8 @@ import {
   JustInServer,
   ServerConfiguration,
   createBetterAuthAdapter,
-  createIdentityCache,
+  RoleEndpointGuard,
+  createIdentityCache
 } from "@just-in/server";
 import {
   configureDB,
