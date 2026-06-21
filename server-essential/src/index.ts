@@ -58,7 +58,13 @@ const authAdapter = createBetterAuthAdapter(auth, {
 
 const config: ServerConfiguration = {
   enableTransactionLogging: true,
-  auth: authAdapter
+  auth: authAdapter,
+  collectionRegistry: {
+    posts:     userScoped("authorId"),
+    messages:  userScoped("userId"),
+    catalog:   publicAccess(),
+    adminLogs: restricted((userId) => myRoleService.hasRole(userId, "admin")),
+  },
 };
 
 
